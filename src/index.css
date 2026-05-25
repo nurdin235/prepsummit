@@ -1022,6 +1022,38 @@ button, input, select {
     width: 100% !important;
     height: 250px !important;
   }
+  .mobile-only-tabs {
+    display: flex !important;
+  }
+  .hero-cards-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px;
+  }
+  .top-card {
+    display: flex !important;
+  }
+}
+
+.mobile-only-tabs {
+  display: none;
+}
+.mobile-tab-btn {
+  background: #ffffff;
+  border: 1px solid #d2dbe5;
+  color: #0c2330;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mobile-tab-btn.active {
+  background: #13809c;
+  color: #ffffff;
+  border-color: #13809c;
 }
 
 @media (max-width: 480px) {

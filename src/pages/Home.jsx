@@ -11,6 +11,7 @@ export default function Home({
   const [activeTab, setActiveTab] = useState('simplified');
   const [activeVideoTab, setActiveVideoTab] = useState('instruction');
   const [activeContentTab, setActiveContentTab] = useState('subjects');
+  const [activeTopTab, setActiveTopTab] = useState(0);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: "var(--font-body)", overflowX: 'hidden' }}>
@@ -86,11 +87,107 @@ export default function Home({
             Learn faster. Stay motivated. Study smarter.
           </h1>
 
+          {/* Inline Signup Form (Mobile & Desktop) */}
+          <div style={{ 
+            maxWidth: '1000px', 
+            margin: '0 auto 64px auto', 
+            display: 'flex', 
+            gap: '16px', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            flexWrap: 'wrap',
+            position: 'relative',
+            zIndex: 10
+          }}>
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              style={{ 
+                padding: '16px 20px', 
+                borderRadius: '6px', 
+                border: 'none', 
+                width: '100%', 
+                maxWidth: '300px', 
+                fontSize: '1rem', 
+                outline: 'none',
+                fontFamily: "var(--font-body)",
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }} 
+              className="full-width-mobile"
+            />
+            <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }} className="full-width-mobile">
+              <select 
+                style={{ 
+                  appearance: 'none', 
+                  width: '100%', 
+                  padding: '16px 20px', 
+                  borderRadius: '6px', 
+                  border: 'none', 
+                  fontSize: '1rem', 
+                  outline: 'none', 
+                  color: '#718096', 
+                  cursor: 'pointer',
+                  fontFamily: "var(--font-body)",
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                }}
+              >
+                <option value="">What best describes you?</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="parent">Parent</option>
+              </select>
+              <div style={{ position: 'absolute', right: '16px', top: '16px', pointerEvents: 'none', color: '#718096' }}>
+                <ChevronDown size={20} />
+              </div>
+            </div>
+            <button 
+              onClick={() => setActivePage('signup')}
+              style={{ 
+                backgroundColor: '#ffb627', 
+                color: '#000000', 
+                border: 'none', 
+                borderRadius: '6px', 
+                padding: '16px 32px', 
+                fontSize: '1rem', 
+                fontWeight: '800', 
+                cursor: 'pointer', 
+                whiteSpace: 'nowrap',
+                fontFamily: "var(--font-body)",
+                transition: 'background-color 0.2s',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }}
+              className="full-width-mobile"
+              onMouseOver={(e) => e.target.style.backgroundColor = '#fba919'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#ffb627'}
+            >
+              Create an account
+            </button>
+          </div>
+
+          <div className="mobile-only-tabs" style={{ 
+            display: 'flex', 
+            overflowX: 'auto', 
+            gap: '8px', 
+            marginBottom: '24px', 
+            paddingBottom: '12px', 
+            whiteSpace: 'nowrap',
+            width: '100%',
+            maxWidth: '1000px',
+            margin: '0 auto 24px auto'
+          }}>
+            <button className={`mobile-tab-btn ${activeTopTab === 0 ? 'active' : ''}`} onClick={() => setActiveTopTab(0)}>Study</button>
+            <button className={`mobile-tab-btn ${activeTopTab === 1 ? 'active' : ''}`} onClick={() => setActiveTopTab(1)}>Test Prep</button>
+            <button className={`mobile-tab-btn ${activeTopTab === 2 ? 'active' : ''}`} onClick={() => setActiveTopTab(2)}>Credit</button>
+            <button className={`mobile-tab-btn ${activeTopTab === 3 ? 'active' : ''}`} onClick={() => setActiveTopTab(3)}>Teach</button>
+            <button className={`mobile-tab-btn ${activeTopTab === 4 ? 'active' : ''}`} onClick={() => setActiveTopTab(4)}>Homeschool</button>
+            <button className={`mobile-tab-btn ${activeTopTab === 5 ? 'active' : ''}`} onClick={() => setActiveTopTab(5)}>AI Mastery</button>
+          </div>
+
           {/* 3 CREAM-COLORED CARDS GRID */}
-          <div className="responsive-grid-3">
+          <div className="responsive-grid-3 hero-cards-container">
             
             {/* Card 1: Study for class */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 0 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -162,7 +259,7 @@ export default function Home({
             </div>
 
             {/* Card 2: Ace your test prep */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 1 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -234,7 +331,7 @@ export default function Home({
             </div>
 
             {/* Card 3: Earn college credit */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 2 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -305,8 +402,66 @@ export default function Home({
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* 3. SEARCH SECTION (Moved up) */}
+      <section style={{ padding: '60px 24px 20px 24px', width: '100%', backgroundColor: '#ffffff' }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          textAlign: 'center',
+          background: 'linear-gradient(90deg, #f1f3e6 0%, #e2f5f7 100%)',
+          borderRadius: '12px',
+          padding: '80px 24px'
+        }}>
+          <h2 style={{ 
+            fontSize: '2.8rem', 
+            color: '#000000', 
+            fontFamily: "var(--font-heading), sans-serif", 
+            fontWeight: '900', 
+            marginBottom: '36px', 
+            letterSpacing: '-0.02em' 
+          }}>
+            What do you want to learn today?
+          </h2>
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              setActivePage('catalog');
+            }}
+            style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}
+          >
+            <div style={{ position: 'absolute', left: '24px', top: '22px', color: '#000000' }}>
+              <Search size={24} strokeWidth={2.5} />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Search Courses & Lessons" 
+              style={{ 
+                width: '100%', 
+                padding: '22px 24px 22px 64px', 
+                borderRadius: '8px', 
+                border: '1.5px solid #d2dbe5', 
+                fontSize: '1.15rem', 
+                outline: 'none', 
+                boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                fontFamily: "var(--font-body)",
+                color: '#222222'
+              }} 
+            />
+          </form>
+        </div>
+      </section>
+
+      {/* CARDS 4-6 GRID */}
+      <section style={{ padding: '20px 24px 60px 24px', width: '100%', backgroundColor: '#ffffff' }}>
+        <div style={{ maxWidth: '1150px', margin: '0 auto', position: 'relative', zIndex: 3, width: '100%' }}>
+          <div className="responsive-grid-3 hero-cards-container">
+
             {/* Card 4: Teach your class */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 3 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -378,7 +533,7 @@ export default function Home({
             </div>
 
             {/* Card 5: Homeschool your child */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 4 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -450,7 +605,7 @@ export default function Home({
             </div>
 
             {/* Card 6: AI mastery */}
-            <div style={{
+            <div className={`top-card ${activeTopTab === 5 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
               overflow: 'hidden',
@@ -502,118 +657,7 @@ export default function Home({
         </div>
       </section>
 
-      {/* 2. BLACK BANNER SECTION */}
-      <section style={{ backgroundColor: '#000000', padding: '24px', width: '100%', position: 'relative', zIndex: 10 }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '16px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-          <input 
-            type="email" 
-            placeholder="Email Address" 
-            style={{ 
-              padding: '16px 20px', 
-              borderRadius: '6px', 
-              border: 'none', 
-              width: '100%', 
-              maxWidth: '300px', 
-              fontSize: '1rem', 
-              outline: 'none',
-              fontFamily: "var(--font-body)"
-            }} 
-          />
-          <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
-            <select 
-              style={{ 
-                appearance: 'none', 
-                width: '100%', 
-                padding: '16px 20px', 
-                borderRadius: '6px', 
-                border: 'none', 
-                fontSize: '1rem', 
-                outline: 'none', 
-                color: '#718096', 
-                cursor: 'pointer',
-                fontFamily: "var(--font-body)"
-              }}
-            >
-              <option value="">What best describes you?</option>
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="parent">Parent</option>
-            </select>
-            <div style={{ position: 'absolute', right: '16px', top: '16px', pointerEvents: 'none', color: '#718096' }}>
-              <ChevronDown size={20} />
-            </div>
-          </div>
-          <button 
-            onClick={() => setActivePage('signup')}
-            style={{ 
-              backgroundColor: '#ffb627', 
-              color: '#000000', 
-              border: 'none', 
-              borderRadius: '6px', 
-              padding: '16px 32px', 
-              fontSize: '1rem', 
-              fontWeight: '800', 
-              cursor: 'pointer', 
-              whiteSpace: 'nowrap',
-              fontFamily: "var(--font-body)",
-              transition: 'background-color 0.2s'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#fba919'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#ffb627'}
-          >
-            Create an account
-          </button>
-        </div>
-      </section>
-
-      {/* 3. SEARCH SECTION */}
-      <section style={{ padding: '60px 24px 20px 24px', width: '100%', backgroundColor: '#ffffff' }}>
-        <div style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          textAlign: 'center',
-          background: 'linear-gradient(90deg, #f1f3e6 0%, #e2f5f7 100%)',
-          borderRadius: '12px',
-          padding: '80px 24px'
-        }}>
-          <h2 style={{ 
-            fontSize: '2.8rem', 
-            color: '#000000', 
-            fontFamily: "var(--font-heading), sans-serif", 
-            fontWeight: '900', 
-            marginBottom: '36px', 
-            letterSpacing: '-0.02em' 
-          }}>
-            What do you want to learn today?
-          </h2>
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              setActivePage('catalog');
-            }}
-            style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}
-          >
-            <div style={{ position: 'absolute', left: '24px', top: '22px', color: '#000000' }}>
-              <Search size={24} strokeWidth={2.5} />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search Courses & Lessons" 
-              style={{ 
-                width: '100%', 
-                padding: '22px 24px 22px 64px', 
-                borderRadius: '8px', 
-                border: '1.5px solid #d2dbe5', 
-                fontSize: '1.15rem', 
-                outline: 'none', 
-                boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
-                fontFamily: "var(--font-body)",
-                color: '#222222'
-              }} 
-            />
-          </form>
-        </div>
-      </section>
+      {/* 2. BLACK BANNER SECTION (Removed, moved to Hero) */}
 
       {/* 4. ETS OFFICIAL PARTNER SECTION */}
       <section style={{ padding: '20px 24px 60px 24px', width: '100%', backgroundColor: '#ffffff' }}>
@@ -645,7 +689,7 @@ export default function Home({
             We partnered with ETS, the makers of Praxis® and TOEFL® tests, to deliver test prep proven to boost confidence and improve scores.
           </p>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '80px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', flexWrap: 'wrap' }} className="flex-col-mobile">
             {/* Praxis Logo and Button */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -1719,7 +1763,7 @@ export default function Home({
               gap: '24px', 
               alignItems: 'center',
               boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-            }}>
+            }} >
               {/* Logo Placeholder */}
               <div style={{ flexShrink: 0, width: '140px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <svg width="48" height="32" viewBox="0 0 24 24" fill="none" stroke="#13809c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1754,7 +1798,7 @@ export default function Home({
               gap: '24px', 
               alignItems: 'center',
               boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-            }}>
+            }} >
               {/* Logo Placeholder */}
               <div style={{ flexShrink: 0, width: '140px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ color: '#718096', fontSize: '0.9rem', fontWeight: '900', letterSpacing: '0.05em', lineHeight: '1' }}>PLEDGE</span>
