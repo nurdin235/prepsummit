@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 
-export default function Login({ setActivePage }) {
+export default function Login({ setActivePage, onStartSignup, onSelectCategoryLanding, onOpenInfo }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(true);
@@ -171,13 +171,13 @@ export default function Login({ setActivePage }) {
             {/* Bottom auxiliary classroom access links */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingLeft: '8px' }}>
               <span 
-                onClick={() => { setActivePage('signup'); }}
+                onClick={() => { onStartSignup(); }}
                 style={{ fontSize: '0.9rem', color: '#13809c', fontWeight: '600', cursor: 'pointer', textDecoration: 'underline' }}
               >
                 Join a classroom
               </span>
               <span 
-                onClick={() => { setActivePage('signup'); }}
+                onClick={() => { onStartSignup(); }}
                 style={{ fontSize: '0.9rem', color: '#13809c', fontWeight: '600', cursor: 'pointer', textDecoration: 'underline' }}
               >
                 Join with a group license code
@@ -222,7 +222,7 @@ export default function Login({ setActivePage }) {
             {/* Account Creation CTAs */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '380px' }}>
               <button
-                onClick={() => setActivePage('signup')}
+                onClick={() => onStartSignup()}
                 style={{
                   backgroundColor: '#ffb627',
                   border: 'none',
@@ -242,7 +242,7 @@ export default function Login({ setActivePage }) {
               </button>
 
               <button
-                onClick={() => setActivePage('signup')}
+                onClick={() => onStartSignup()}
                 style={{
                   backgroundColor: '#ffffff',
                   border: '1.5px solid #13809c',
@@ -287,28 +287,28 @@ export default function Login({ setActivePage }) {
             {/* Plans */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <h4 style={{ color: '#1f4e5a', fontWeight: '800', fontSize: '0.95rem' }}>Plans</h4>
-              <span onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Student Solutions</span>
-              <span onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Teacher Solutions</span>
-              <span onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Working Scholars® Solutions</span>
+              <span onClick={() => onSelectCategoryLanding('homeschool')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Student Solutions</span>
+              <span onClick={() => onSelectCategoryLanding('teacher-resources')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Teacher Solutions</span>
+              <span onClick={() => onSelectCategoryLanding('college-credit')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Working Scholars® Solutions</span>
             </div>
 
             {/* About Us */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <h4 style={{ color: '#1f4e5a', fontWeight: '800', fontSize: '0.95rem' }}>About Us</h4>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Blog</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Careers</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Teach For Us</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Press Center</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Ambassador</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Scholarships</span>
+              <span onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Blog</span>
+              <span onClick={() => onOpenInfo('careers')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Careers</span>
+              <span onClick={() => onOpenInfo('teach')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Teach For Us</span>
+              <span onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Press Center</span>
+              <span onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Ambassador</span>
+              <span onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Scholarships</span>
             </div>
 
             {/* Support */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <h4 style={{ color: '#1f4e5a', fontWeight: '800', fontSize: '0.95rem' }}>Support</h4>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Contact Support</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>FAQ</span>
-              <span style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Site Feedback</span>
+              <span onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Contact Support</span>
+              <span onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>FAQ</span>
+              <span onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer', textDecoration: 'underline' }}>Site Feedback</span>
             </div>
 
             {/* Download the app */}
@@ -391,15 +391,15 @@ export default function Login({ setActivePage }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px' }}>
               <span>© Copyright 2026 Study.com. All other trademarks and copyrights are the property of their respective owners. All rights reserved.</span>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>Terms of Use</span>
+                <span onClick={() => onOpenInfo('terms')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Terms of Use</span>
                 <span>|</span>
-                <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>Privacy Policy</span>
+                <span onClick={() => onOpenInfo('privacy')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Privacy Policy</span>
                 <span>|</span>
-                <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>DMCA Notice</span>
+                <span onClick={() => onOpenInfo('terms')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>DMCA Notice</span>
                 <span>|</span>
-                <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>ADA Compliance</span>
+                <span onClick={() => onOpenInfo('terms')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>ADA Compliance</span>
                 <span>|</span>
-                <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>Honor Code for Students</span>
+                <span onClick={() => onOpenInfo('terms')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Honor Code for Students</span>
               </div>
             </div>
 

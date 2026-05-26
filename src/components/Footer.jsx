@@ -1,5 +1,5 @@
 
-export default function Footer({ setActivePage }) {
+export default function Footer({ setActivePage, onSelectCategoryLanding, onOpenInfo }) {
   return (
     <footer className="footer" style={{ 
       backgroundColor: '#ffffff', 
@@ -60,11 +60,11 @@ export default function Footer({ setActivePage }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h4 style={{ color: '#1f4e5a', fontSize: '1rem', fontWeight: '800', fontFamily: 'var(--font-heading)' }}>Plans</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <span className="footer-link" onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer' }}>Study Help</span>
-            <span className="footer-link" onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer' }}>Test Preparation</span>
-            <span className="footer-link" onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer' }}>College Credit</span>
-            <span className="footer-link" onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer' }}>Teacher Resources</span>
-            <span className="footer-link" onClick={() => setActivePage('catalog')} style={{ color: '#004c6c', cursor: 'pointer' }}>Working Scholars®</span>
+            <span className="footer-link" onClick={() => onSelectCategoryLanding('homeschool')} style={{ color: '#004c6c', cursor: 'pointer' }}>Study Help</span>
+            <span className="footer-link" onClick={() => setActivePage('ftce')} style={{ color: '#004c6c', cursor: 'pointer' }}>Test Preparation</span>
+            <span className="footer-link" onClick={() => onSelectCategoryLanding('college-credit')} style={{ color: '#004c6c', cursor: 'pointer' }}>College Credit</span>
+            <span className="footer-link" onClick={() => onSelectCategoryLanding('teacher-resources')} style={{ color: '#004c6c', cursor: 'pointer' }}>Teacher Resources</span>
+            <span className="footer-link" onClick={() => onSelectCategoryLanding('college-credit')} style={{ color: '#004c6c', cursor: 'pointer' }}>Working Scholars®</span>
           </div>
         </div>
 
@@ -72,12 +72,12 @@ export default function Footer({ setActivePage }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h4 style={{ color: '#1f4e5a', fontSize: '1rem', fontWeight: '800', fontFamily: 'var(--font-heading)' }}>About us</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Blog</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Careers</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Teach for Us</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Press Center</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Ambassador</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Scholarships</span>
+            <span className="footer-link" onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer' }}>Blog</span>
+            <span className="footer-link" onClick={() => onOpenInfo('careers')} style={{ color: '#004c6c', cursor: 'pointer' }}>Careers</span>
+            <span className="footer-link" onClick={() => onOpenInfo('teach')} style={{ color: '#004c6c', cursor: 'pointer' }}>Teach for Us</span>
+            <span className="footer-link" onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer' }}>Press Center</span>
+            <span className="footer-link" onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer' }}>Ambassador</span>
+            <span className="footer-link" onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer' }}>Scholarships</span>
           </div>
         </div>
 
@@ -85,14 +85,14 @@ export default function Footer({ setActivePage }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h4 style={{ color: '#1f4e5a', fontSize: '1rem', fontWeight: '800', fontFamily: 'var(--font-heading)' }}>Support</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>FAQ</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Site Feedback</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Terms of Use</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Privacy Policy</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>DMCA Notice</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>ADA Compliance</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Honor Code for Students</span>
-            <span className="footer-link" style={{ color: '#004c6c', cursor: 'pointer' }}>Resources and Guides</span>
+            <span className="footer-link" onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer' }}>FAQ</span>
+            <span className="footer-link" onClick={() => onOpenInfo('faq')} style={{ color: '#004c6c', cursor: 'pointer' }}>Site Feedback</span>
+            <span className="footer-link" onClick={() => onOpenInfo('terms')} style={{ color: '#004c6c', cursor: 'pointer' }}>Terms of Use</span>
+            <span className="footer-link" onClick={() => onOpenInfo('privacy')} style={{ color: '#004c6c', cursor: 'pointer' }}>Privacy Policy</span>
+            <span className="footer-link" onClick={() => onOpenInfo('terms')} style={{ color: '#004c6c', cursor: 'pointer' }}>DMCA Notice</span>
+            <span className="footer-link" onClick={() => onOpenInfo('terms')} style={{ color: '#004c6c', cursor: 'pointer' }}>ADA Compliance</span>
+            <span className="footer-link" onClick={() => onOpenInfo('terms')} style={{ color: '#004c6c', cursor: 'pointer' }}>Honor Code for Students</span>
+            <span className="footer-link" onClick={() => onOpenInfo('about')} style={{ color: '#004c6c', cursor: 'pointer' }}>Resources and Guides</span>
           </div>
         </div>
 

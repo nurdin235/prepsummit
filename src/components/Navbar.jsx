@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, Menu, X } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
 
 export default function Navbar({ 
   activePage, 
@@ -8,7 +8,10 @@ export default function Navbar({
   searchQuery, 
   setSearchQuery, 
   courses,
-  onSelectCourse
+  onSelectCourse,
+  onStartSignup,
+  onSelectCategoryLanding,
+  onOpenInfo
 }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,37 +19,368 @@ export default function Navbar({
   const [prevSearchQuery, setPrevSearchQuery] = useState(searchQuery);
   const [showSearchInput, setShowSearchInput] = useState(false);
 
-  const dropdownData = {
+  const [activeSubCategory, setActiveSubCategory] = useState({
+    courses: 'By Subject',
+    subjects: 'Business',
+    teachers: 'Lesson Plans',
+    certifications: 'Finance Exams',
+    degrees: 'Transfer Credits'
+  });
+
+  const dropdownStructure = {
     courses: [
-      { id: 'ftce-professional-education-test', text: 'Teacher Certification (FTCE PEd)' },
-      { id: 'ap-calculus', text: 'Advanced Placement Calculus' },
-      { id: 'cell-biology', text: 'College Prep Cell Biology' },
-      { id: 'intro-psychology', text: 'Introduction to Psychology' },
-      { id: 'macroeconomics', text: 'Macroeconomics & Finance' }
+      {
+        name: 'By Subject',
+        hasArrow: true,
+        items: [
+          { text: 'Arts', landing: 'subject-humanities' },
+          { text: 'Business', landing: 'subject-business' },
+          { text: 'Computer Science', landing: 'subject-science' },
+          { text: 'Education & Teaching', landing: 'teacher-resources' },
+          { text: 'English (ELA)', landing: 'subject-english' },
+          { text: 'Foreign Language', query: 'Foreign Language' },
+          { text: 'Health & Medicine', query: 'Health & Medicine' },
+          { text: 'History', landing: 'subject-humanities' },
+          { text: 'Humanities', landing: 'subject-humanities' },
+          { text: 'Math', landing: 'subject-math' },
+          { text: 'Psychology', id: 'intro-psychology' },
+          { text: 'Science', landing: 'subject-science' },
+          { text: 'Social Science', landing: 'subject-humanities' }
+        ]
+      },
+      {
+        name: 'College Courses',
+        hasArrow: true,
+        items: [
+          { text: 'CLEP Courses', landing: 'college-credit' },
+          { text: 'AP Courses', landing: 'college-credit' },
+          { text: 'DSST Courses', landing: 'college-credit' },
+          { text: 'Transferable Credit Courses', landing: 'college-credit' },
+          { text: 'Working Scholars® Orientation', id: 'working-scholars-intro' }
+        ]
+      },
+      {
+        name: 'High School Courses',
+        hasArrow: true,
+        items: [
+          { text: 'AP Test Prep', landing: 'college-credit' },
+          { text: 'High School Homework Help', landing: 'subject-math' },
+          { text: 'Common Core Standards', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'Middle School Courses',
+        hasArrow: true,
+        items: [
+          { text: 'Middle School Math', landing: 'subject-math' },
+          { text: 'Middle School Science', landing: 'subject-science' },
+          { text: 'Middle School English', landing: 'subject-english' }
+        ]
+      },
+      {
+        name: 'Elementary School Courses',
+        hasArrow: true,
+        items: [
+          { text: 'Elementary Math', landing: 'subject-math' },
+          { text: 'Elementary Science', landing: 'subject-science' },
+          { text: 'Reading Help', landing: 'subject-english' }
+        ]
+      }
     ],
     subjects: [
-      { query: 'Math', text: 'Mathematics' },
-      { query: 'Biology', text: 'Biological Sciences' },
-      { query: 'Science', text: 'Physical Science' },
-      { query: 'English', text: 'English & Writing' },
-      { query: 'Finance', text: 'Business & Finance' },
-      { query: 'Psychology', text: 'Psychology' }
+      {
+        name: 'Art',
+        hasArrow: true,
+        items: [
+          { text: 'Art History', landing: 'subject-humanities' },
+          { text: 'Graphic Design', landing: 'subject-humanities' },
+          { text: 'Studio Art', landing: 'subject-humanities' },
+          { text: 'Music Theory', landing: 'subject-humanities' }
+        ]
+      },
+      {
+        name: 'Business',
+        hasArrow: true,
+        items: [
+          { text: 'Accounting', landing: 'subject-business' },
+          { text: 'Business Administration', landing: 'subject-business' },
+          { text: 'Business Communication', landing: 'subject-business' },
+          { text: 'Business Ethics', landing: 'subject-business' },
+          { text: 'Business Intelligence', landing: 'subject-business' },
+          { text: 'Business Law', landing: 'subject-business' },
+          { text: 'Economics', id: 'macroeconomics' },
+          { text: 'Finance', id: 'macroeconomics' },
+          { text: 'Healthcare Administration', landing: 'subject-business' },
+          { text: 'Human Resources', landing: 'subject-business' },
+          { text: 'Information Technology', landing: 'subject-business' },
+          { text: 'International Business', landing: 'subject-business' },
+          { text: 'Operations Management', landing: 'subject-business' },
+          { text: 'Real Estate', id: 'real-estate-salesperson' },
+          { text: 'Sales & Marketing', landing: 'subject-business' }
+        ]
+      },
+      {
+        name: 'Computer Science',
+        hasArrow: true,
+        items: [
+          { text: 'Computer Engineering', landing: 'subject-science' },
+          { text: 'Computer Programming', query: 'Computer Science' },
+          { text: 'Cybersecurity', landing: 'subject-science' },
+          { text: 'Data Science', landing: 'subject-science' },
+          { text: 'Software', landing: 'subject-science' }
+        ]
+      },
+      {
+        name: 'Education & Teaching',
+        hasArrow: true,
+        items: [
+          { text: 'Curriculum Design', landing: 'teacher-resources' },
+          { text: 'Special Education', landing: 'teacher-resources' },
+          { text: 'Classroom Management', landing: 'teacher-resources' },
+          { text: 'Instructional Technology', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'English',
+        hasArrow: true,
+        items: [
+          { text: 'Grammar', landing: 'subject-english' },
+          { text: 'Literature', landing: 'subject-english' },
+          { text: 'Public Speaking', landing: 'subject-english' },
+          { text: 'Reading', landing: 'subject-english' },
+          { text: 'Vocabulary', landing: 'subject-english' },
+          { text: 'Writing & Composition', id: 'english-composition' }
+        ]
+      },
+      {
+        name: 'Health & Medicine',
+        hasArrow: true,
+        items: [
+          { text: 'Nursing (NCLEX)', id: 'nclex-rn-prep' },
+          { text: 'Anatomy & Physiology', id: 'cell-biology' },
+          { text: 'Medical Terminology', landing: 'subject-science' },
+          { text: 'Pharmacology', landing: 'subject-science' }
+        ]
+      },
+      {
+        name: 'History',
+        hasArrow: true,
+        items: [
+          { text: 'US History', id: 'us-history' },
+          { text: 'World History', landing: 'subject-humanities' },
+          { text: 'European History', landing: 'subject-humanities' }
+        ]
+      },
+      {
+        name: 'Humanities',
+        hasArrow: true,
+        items: [
+          { text: 'Philosophy', landing: 'subject-humanities' },
+          { text: 'Literature Studies', landing: 'subject-humanities' },
+          { text: 'Art Criticism', landing: 'subject-humanities' }
+        ]
+      },
+      {
+        name: 'Math',
+        hasArrow: true,
+        items: [
+          { text: 'Algebra', id: 'clep-college-algebra' },
+          { text: 'Geometry', landing: 'subject-math' },
+          { text: 'Calculus', id: 'ap-calculus' },
+          { text: 'Statistics', landing: 'subject-math' }
+        ]
+      },
+      {
+        name: 'Psychology',
+        hasArrow: true,
+        items: [
+          { text: 'Intro to Psychology', id: 'intro-psychology' },
+          { text: 'Developmental Psych', landing: 'subject-humanities' },
+          { text: 'Abnormal Psych', landing: 'subject-humanities' }
+        ]
+      },
+      {
+        name: 'Science',
+        hasArrow: true,
+        items: [
+          { text: 'Cell Biology', id: 'cell-biology' },
+          { text: 'Chemistry', landing: 'subject-science' },
+          { text: 'Physics', landing: 'subject-science' },
+          { text: 'Earth Science', landing: 'subject-science' }
+        ]
+      },
+      {
+        name: 'Social Science',
+        hasArrow: true,
+        items: [
+          { text: 'Sociology', landing: 'subject-humanities' },
+          { text: 'Anthropology', landing: 'subject-humanities' },
+          { text: 'Political Science', landing: 'subject-humanities' }
+        ]
+      }
     ],
     teachers: [
-      { query: 'Teacher', text: 'Teacher Resources & Worksheets' },
-      { query: 'Lesson', text: 'Lesson Plans & Activities' },
-      { query: 'FTCE', text: 'Keys to the Classroom Prep' }
+      {
+        name: 'Lesson Plans',
+        hasArrow: true,
+        items: [
+          { text: 'Math Lesson Plans', landing: 'teacher-resources' },
+          { text: 'Science Lesson Plans', landing: 'teacher-resources' },
+          { text: 'English Lesson Plans', landing: 'teacher-resources' },
+          { text: 'Social Studies Plans', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'Worksheets & Activities',
+        hasArrow: true,
+        items: [
+          { text: 'Printable Worksheets', landing: 'teacher-resources' },
+          { text: 'Science Experiments', landing: 'teacher-resources' },
+          { text: 'Reading Comprehension', landing: 'teacher-resources' },
+          { text: 'Study Guides', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'Teacher Certification Prep',
+        hasArrow: true,
+        items: [
+          { text: 'FTCE Exam Prep', id: 'ftce-professional-education-test' },
+          { text: 'Praxis Core Prep', id: 'praxis-core' },
+          { text: 'State Certification Info', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'Classroom Management',
+        hasArrow: true,
+        items: [
+          { text: 'Behavior Intervention', landing: 'teacher-resources' },
+          { text: 'Grading Rubrics', landing: 'teacher-resources' },
+          { text: 'Parent-Teacher Communication', landing: 'teacher-resources' }
+        ]
+      }
     ],
     certifications: [
-      { id: 'ftce-professional-education-test', text: 'FTCE Exams (Teacher Cert)' },
-      { query: 'Praxis', text: 'Praxis Test Preparation' },
-      { query: 'TOEFL', text: 'TOEFL English Certification' },
-      { query: 'CLEP', text: 'CLEP College Credit Exams' }
+      {
+        name: 'Teacher Certification Exams',
+        hasArrow: true,
+        items: [
+          { text: 'FTCE exams (Florida)', id: 'ftce-professional-education-test' },
+          { text: 'Praxis core (National)', id: 'praxis-core' },
+          { text: 'CBEST exams (California)', landing: 'teacher-resources' },
+          { text: 'TExES exams (Texas)', landing: 'teacher-resources' }
+        ]
+      },
+      {
+        name: 'Nursing Exams',
+        hasArrow: true,
+        items: [
+          { text: 'NCLEX-RN Prep', id: 'nclex-rn-prep' },
+          { text: 'NCLEX-PN Prep', query: 'NCLEX' },
+          { text: 'TEAS Exam Prep', query: 'TEAS' }
+        ]
+      },
+      {
+        name: 'Real Estate Exams',
+        hasArrow: true,
+        items: [
+          { text: 'Salesperson Exam Prep', id: 'real-estate-salesperson' },
+          { text: 'Broker Exam Prep', query: 'Real Estate' }
+        ]
+      },
+      {
+        name: 'Military Exams',
+        hasArrow: true,
+        items: [
+          { text: 'ASVAB General Prep', id: 'asvab-prep' },
+          { text: 'AFOQT Prep', query: 'ASVAB' }
+        ]
+      },
+      {
+        name: 'Finance Exams',
+        hasArrow: true,
+        items: [
+          { text: 'SIE Test Prep', query: 'Finance' },
+          { text: 'Series 6 Test Prep', query: 'Finance' },
+          { text: 'Series 65 Test Prep', query: 'Finance' },
+          { text: 'Series 66 Test Prep', query: 'Finance' },
+          { text: 'Series 7 Test Prep', query: 'Finance' },
+          { text: 'CPP Test Prep', query: 'Finance' },
+          { text: 'CMA Test Prep', query: 'Finance' },
+          { text: 'All Finance Test Prep', query: 'Finance' }
+        ]
+      },
+      {
+        name: 'Human Resources Exams',
+        hasArrow: true,
+        items: [
+          { text: 'aPHR Prep', query: 'HR' },
+          { text: 'PHR Prep', query: 'HR' },
+          { text: 'SPHR Prep', query: 'HR' }
+        ]
+      },
+      {
+        name: 'Counseling & Social Work Exams',
+        hasArrow: true,
+        items: [
+          { text: 'LCSW Prep', query: 'counseling' },
+          { text: 'MFT Prep', query: 'counseling' }
+        ]
+      },
+      {
+        name: 'Allied Health & Medicine Exams',
+        hasArrow: true,
+        items: [
+          { text: 'CMAA Prep', query: 'medicine' },
+          { text: 'Phlebotomy Tech Prep', query: 'medicine' }
+        ]
+      },
+      {
+        name: 'TOEFL Exam',
+        hasArrow: true,
+        items: [
+          { text: 'TOEFL Reading', id: 'toefl-prep' },
+          { text: 'TOEFL Listening', id: 'toefl-prep' },
+          { text: 'TOEFL Speaking', id: 'toefl-prep' },
+          { text: 'TOEFL Writing', id: 'toefl-prep' }
+        ]
+      },
+      {
+        name: 'All Test Prep',
+        hasArrow: false,
+        items: [
+          { text: 'Browse Test Prep Directory', query: 'Exam' }
+        ]
+      }
     ],
     degrees: [
-      { query: 'Credit', text: 'Transfer College Credits' },
-      { query: 'Scholars', text: 'Working Scholars® Degrees' },
-      { query: 'College', text: 'Partner College Programs' }
+      {
+        name: 'Transfer Credits',
+        hasArrow: true,
+        items: [
+          { text: 'ACE Recommended Courses', landing: 'college-credit' },
+          { text: 'NCCRS Approved Courses', landing: 'college-credit' },
+          { text: 'CLEP Exam Prep', id: 'clep-college-algebra' },
+          { text: 'DSST Exam Prep', landing: 'college-credit' }
+        ]
+      },
+      {
+        name: 'Working Scholars®',
+        hasArrow: true,
+        items: [
+          { text: 'Program Overview', id: 'working-scholars-intro' },
+          { text: 'Eligibility Guidelines', landing: 'college-credit' },
+          { text: 'Sponsor Partners', landing: 'college-credit' }
+        ]
+      },
+      {
+        name: 'Degree Pathways',
+        hasArrow: true,
+        items: [
+          { text: 'Associate Degree Paths', landing: 'college-credit' },
+          { text: 'Bachelor Degree Paths', landing: 'college-credit' },
+          { text: 'Credit Transfer Guide', landing: 'college-credit' }
+        ]
+      }
     ]
   };
 
@@ -120,9 +454,9 @@ export default function Navbar({
         fontWeight: '600',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }} className="hide-on-mobile">
-        <span style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Teachers</span>
-        <span style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Working Scholars®</span>
-        <span style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For College Credit</span>
+        <span onClick={() => onSelectCategoryLanding('teacher-resources')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Teachers</span>
+        <span onClick={() => onSelectCategoryLanding('college-credit')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Working Scholars®</span>
+        <span onClick={() => onSelectCategoryLanding('college-credit')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For College Credit</span>
       </div>
 
       {/* 2. Main Navigation Header */}
@@ -184,7 +518,7 @@ export default function Navbar({
               
               {/* Plans Link */}
               <button 
-                onClick={() => { setActivePage('signup'); }}
+                onClick={() => { onStartSignup(); }}
                 style={{
                   background: 'none', border: 'none', fontFamily: 'var(--font-heading)',
                   fontWeight: '700', fontSize: '0.92rem', color: '#222222', cursor: 'pointer',
@@ -204,11 +538,34 @@ export default function Navbar({
                   <div 
                     key={key}
                     style={{ position: 'relative' }}
-                    onMouseEnter={() => setActiveDropdown(key)}
+                    onMouseEnter={() => {
+                      setActiveDropdown(key);
+                      const defaultCats = {
+                        courses: 'By Subject',
+                        subjects: 'Business',
+                        teachers: 'Lesson Plans',
+                        certifications: 'Finance Exams',
+                        degrees: 'Transfer Credits'
+                      };
+                      setActiveSubCategory(prev => ({ ...prev, [key]: defaultCats[key] }));
+                    }}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <button 
-                      onClick={() => { setActivePage('catalog'); }}
+                      onClick={() => {
+                        if (key === 'courses') {
+                          setActivePage('catalog');
+                          setSearchQuery('');
+                        } else if (key === 'subjects') {
+                          onSelectCategoryLanding('subject-math');
+                        } else if (key === 'teachers') {
+                          onSelectCategoryLanding('teacher-resources');
+                        } else if (key === 'certifications') {
+                          setActivePage('ftce');
+                        } else if (key === 'degrees') {
+                          onSelectCategoryLanding('college-credit');
+                        }
+                      }}
                       style={{
                         background: 'none', border: 'none', fontFamily: 'var(--font-heading)',
                         fontWeight: '700', fontSize: '0.92rem', color: '#222222', cursor: 'pointer',
@@ -219,40 +576,54 @@ export default function Navbar({
                     >
                       {label} <ChevronDown size={14} style={{ opacity: 0.7 }} />
                     </button>
-
+ 
                     {activeDropdown === key && (
-                      <div style={{
-                        position: 'absolute', top: '100%', left: 0, width: '280px',
-                        backgroundColor: '#ffffff', padding: '8px', zIndex: 999,
-                        border: '1px solid #d2dbe5', boxShadow: 'var(--shadow-lg)',
-                        borderRadius: '6px', display: 'flex', flexDirection: 'column', gap: '4px'
-                      }} className="card">
-                        {dropdownData[key].map((item, idx) => (
-                          <span 
-                            key={idx}
-                            onClick={() => {
-                              if (item.id) {
-                                selectCourseById(item.id);
-                              } else {
-                                setSearchQuery(item.query);
-                                if (item.query === 'FTCE') {
-                                  setActivePage('ftce');
-                                } else {
-                                  setActivePage('catalog');
-                                }
-                              }
-                              setActiveDropdown(null);
-                            }} 
-                            style={{ 
-                              cursor: 'pointer', fontSize: '0.86rem', fontWeight: '600', color: '#222222',
-                              padding: '8px 12px', borderRadius: '4px', display: 'block', transition: 'all 0.2s'
-                            }} 
-                            onMouseOver={e => { e.target.style.backgroundColor = 'var(--primary-light)'; e.target.style.color = 'var(--primary)'; }}
-                            onMouseOut={e => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = '#222222'; }}
-                          >
-                            {item.text}
-                          </span>
-                        ))}
+                      <div className={`nav-dropdown-pane ${(key === 'certifications' || key === 'degrees') ? 'align-right' : ''}`}>
+                        {/* Left column: Categories list */}
+                        <div className="nav-dropdown-left">
+                          {dropdownStructure[key].map((categoryItem) => (
+                            <div
+                              key={categoryItem.name}
+                              className={`nav-dropdown-cat-item ${activeSubCategory[key] === categoryItem.name ? 'active' : ''}`}
+                              onMouseEnter={() => {
+                                setActiveSubCategory(prev => ({ ...prev, [key]: categoryItem.name }));
+                              }}
+                            >
+                              <span>{categoryItem.name}</span>
+                              {categoryItem.hasArrow && <ChevronRight size={14} style={{ opacity: 0.6 }} />}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Right column: Dynamic Sub-items list */}
+                        <div className="nav-dropdown-right">
+                          {(() => {
+                            const currentSubCat = dropdownStructure[key].find(cat => cat.name === activeSubCategory[key]) || dropdownStructure[key][0];
+                            return currentSubCat.items.map((subItem, idx) => (
+                              <span
+                                key={idx}
+                                className="nav-dropdown-sub-item"
+                                onClick={() => {
+                                  if (subItem.landing) {
+                                    onSelectCategoryLanding(subItem.landing);
+                                  } else if (subItem.id) {
+                                    selectCourseById(subItem.id);
+                                  } else if (subItem.query) {
+                                    setSearchQuery(subItem.query);
+                                    if (subItem.query === 'FTCE') {
+                                      setActivePage('ftce');
+                                    } else {
+                                      setActivePage('catalog');
+                                    }
+                                  }
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                {subItem.text}
+                              </span>
+                            ));
+                          })()}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -285,10 +656,9 @@ export default function Navbar({
             >
               Log In
             </button>
-
-            {/* Sign Up Button - Solid Amber */}
+             {/* Sign Up Button - Solid Amber */}
             <button 
-              onClick={() => setActivePage('signup')}
+              onClick={() => onStartSignup()}
               style={{
                 backgroundColor: '#ffb627',
                 border: 'none',
@@ -455,7 +825,7 @@ export default function Navbar({
                 Log In
               </button>
               <button 
-                onClick={() => { setActivePage('signup'); setMobileMenuOpen(false); }}
+                onClick={() => { onStartSignup(); setMobileMenuOpen(false); }}
                 style={{
                   flex: 1,
                   backgroundColor: '#ffb627',

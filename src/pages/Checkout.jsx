@@ -1,413 +1,672 @@
 import { useState } from 'react';
-import { Lock, ShieldCheck, CreditCard } from 'lucide-react';
 
-export default function Checkout({ signupData, onCheckoutComplete }) {
-  const [selectedPlan, setSelectedPlan] = useState('monthly'); // 'monthly' ($59.99) vs 'twoweek' ($39.99)
+export default function Checkout({ signupData, onCheckoutComplete, selectedCourse, onBack }) {
+  const [selectedPlan, setSelectedPlan] = useState('monthly'); // 'monthly' vs 'twoweek'
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' vs 'paypal'
+  const [couponCode, setCouponCode] = useState('');
+  const [showCouponInput, setShowCouponInput] = useState(false);
   const [cardDetails, setCardDetails] = useState({
-    cardholder: signupData ? `${signupData.firstName} ${signupData.lastName}` : '',
     number: '',
-    expiry: '',
-    cvv: '',
-    zip: ''
+    expiryMonth: 'Month',
+    expiryYear: 'Year',
+    cvc: ''
   });
 
-  const handleJoin = (e) => {
-    e.preventDefault();
-    if (paymentMethod === 'card' && (!cardDetails.number || !cardDetails.expiry || !cardDetails.cvv || !cardDetails.zip)) {
-      alert("Please fill out all credit card billing details.");
-      return;
-    }
-    // Simulate successful checkout
-    onCheckoutComplete(selectedPlan === 'monthly' ? '$59.99/mo Monthly Plan' : '$39.99 Two-Week Pass');
+  const getRenewalDateStr = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 14);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   };
 
+  const handleJoin = (e) => {
+    if (e) e.preventDefault();
+    if (paymentMethod === 'card') {
+      if (!cardDetails.number || cardDetails.expiryMonth === 'Month' || cardDetails.expiryYear === 'Year' || !cardDetails.cvc) {
+        alert("Please enter all required credit card credentials.");
+        return;
+      }
+    }
+    const planText = selectedPlan === 'monthly' ? '$59.99/mo Monthly Plan' : '$39.99 Two-Week Pass';
+    onCheckoutComplete(planText);
+  };
+
+  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+  const years = Array.from({ length: 11 }, (_, i) => String(2026 + i));
+
+  // Determine course name to display
+  const courseTitle = selectedCourse?.title || "FTCE Test Prep";
+
   return (
-    <div className="fade-in checkout-layout-grid" style={{ 
-      maxWidth: '1080px', 
-      margin: '40px auto', 
-      padding: '0 16px'
+    <div style={{
+      backgroundColor: '#f4f6f8',
+      minHeight: '100vh',
+      fontFamily: 'var(--font-body)',
+      padding: '40px 16px 80px 16px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start'
     }}>
       
-      {/* Left Column: Payment Form */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <div>
-          <h2 style={{ fontSize: '1.85rem', color: '#1f4e5a', fontWeight: '800', marginBottom: '8px' }}>
-            Complete your registration
-          </h2>
-          <p style={{ color: '#4a5568', fontSize: '0.92rem' }}>
-            You're steps away from unlocking 1,500+ study guides and practice exams.
-          </p>
-        </div>
+      {/* Inline styles for custom mobile compliance */}
+      <style>{`
+        @media (max-width: 768px) {
+          .checkout-grid-layout {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 32px !important;
+          }
+          .checkout-left-col {
+            max-width: 100% !important;
+            width: 100% !important;
+          }
+          .checkout-right-col {
+            max-width: 100% !important;
+            width: 100% !important;
+            order: -1; /* Display plan summary card on top of forms on mobile */
+            padding-bottom: 24px;
+            border-bottom: 1.5px dashed #cbd5e1;
+            margin-bottom: 12px;
+          }
+          .grid-2-mobile-stack {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .payment-toggle-container {
+            flex-direction: column !important;
+            gap: 10px !important;
+          }
+          .zip-input-mobile-full {
+            width: 100% !important;
+          }
+        }
+      `}</style>
 
-        {/* Payment Tabs */}
-        <div style={{ display: 'flex', border: '1px solid #d2dbe5', borderRadius: '4px', overflow: 'hidden' }}>
-          <button 
-            onClick={() => setPaymentMethod('card')}
-            style={{
-              flex: 1,
-              padding: '14px',
-              border: 'none',
-              backgroundColor: paymentMethod === 'card' ? '#ffffff' : '#f2f6f9',
-              color: paymentMethod === 'card' ? '#13809c' : '#4a5568',
-              fontWeight: '700',
-              fontSize: '0.95rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              borderBottom: paymentMethod === 'card' ? '3px solid #13809c' : 'none'
-            }}
-          >
-            <CreditCard size={18} /> Credit or Debit Card
-          </button>
-          <button 
-            onClick={() => setPaymentMethod('paypal')}
-            style={{
-              flex: 1,
-              padding: '14px',
-              border: 'none',
-              backgroundColor: paymentMethod === 'paypal' ? '#ffffff' : '#f2f6f9',
-              color: paymentMethod === 'paypal' ? '#13809c' : '#4a5568',
-              fontWeight: '700',
-              fontSize: '0.95rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              borderBottom: paymentMethod === 'paypal' ? '3px solid #13809c' : 'none'
-            }}
-          >
-            {/* PayPal Text Logo styling */}
-            <span style={{ fontStyle: 'italic', fontWeight: '900', color: '#003087' }}>Pay<span style={{ color: '#0079C1' }}>Pal</span></span>
-          </button>
-        </div>
-
-        {paymentMethod === 'card' ? (
-          <form onSubmit={handleJoin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* Cardholder Name */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: '700', color: '#1f4e5a' }}>CARDHOLDER NAME</label>
-              <input 
-                type="text" 
-                value={cardDetails.cardholder}
-                onChange={e => setCardDetails({ ...cardDetails, cardholder: e.target.value })}
-                required
-                style={{
-                  padding: '12px 16px',
-                  border: '1.5px solid #d2dbe5',
-                  borderRadius: '4px',
-                  fontSize: '0.95rem',
-                  outline: 'none',
-                  color: '#222222'
-                }}
-              />
-            </div>
-
-            {/* Card Number */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between' }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: '700', color: '#1f4e5a' }}>CARD NUMBER</label>
-                <div style={{ display: 'flex', gap: '4px' }}>
-                  {/* Small card provider icons */}
-                  <span style={{ fontSize: '10px', padding: '2px 4px', border: '1px solid #d2dbe5', borderRadius: '3px', fontWeight: '800', color: '#1A1F71' }}>VISA</span>
-                  <span style={{ fontSize: '10px', padding: '2px 4px', border: '1px solid #d2dbe5', borderRadius: '3px', fontWeight: '800', color: '#EB001B' }}>MC</span>
-                  <span style={{ fontSize: '10px', padding: '2px 4px', border: '1px solid #d2dbe5', borderRadius: '3px', fontWeight: '800', color: '#0173B2' }}>AMEX</span>
-                </div>
-              </div>
-              <input 
-                type="text" 
-                placeholder="4111 2222 3333 4444" 
-                value={cardDetails.number}
-                onChange={e => setCardDetails({ ...cardDetails, number: e.target.value })}
-                maxLength="19"
-                required
-                style={{
-                  padding: '12px 16px',
-                  border: '1.5px solid #d2dbe5',
-                  borderRadius: '4px',
-                  fontSize: '0.95rem',
-                  outline: 'none',
-                  color: '#222222'
-                }}
-              />
-            </div>
-
-            {/* Expiry and CVV */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: '700', color: '#1f4e5a' }}>EXPIRATION DATE</label>
-                <input 
-                  type="text" 
-                  placeholder="MM / YY" 
-                  value={cardDetails.expiry}
-                  onChange={e => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                  maxLength="5"
-                  required
-                  style={{
-                    padding: '12px 16px',
-                    border: '1.5px solid #d2dbe5',
-                    borderRadius: '4px',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    color: '#222222'
-                  }}
-                />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: '700', color: '#1f4e5a' }}>SECURITY CODE (CVV)</label>
-                <input 
-                  type="password" 
-                  placeholder="123" 
-                  value={cardDetails.cvv}
-                  onChange={e => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                  maxLength="4"
-                  required
-                  style={{
-                    padding: '12px 16px',
-                    border: '1.5px solid #d2dbe5',
-                    borderRadius: '4px',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    color: '#222222'
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* ZIP Code */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: '700', color: '#1f4e5a' }}>ZIP / POSTAL CODE</label>
-              <input 
-                type="text" 
-                placeholder="e.g. 90210" 
-                value={cardDetails.zip}
-                onChange={e => setCardDetails({ ...cardDetails, zip: e.target.value })}
-                required
-                style={{
-                  padding: '12px 16px',
-                  border: '1.5px solid #d2dbe5',
-                  borderRadius: '4px',
-                  fontSize: '0.95rem',
-                  outline: 'none',
-                  color: '#222222',
-                  width: '180px'
-                }}
-              />
-            </div>
-
-            {/* Green Lock Join Now Button */}
-            <button 
-              type="submit"
-              style={{
-                backgroundColor: '#16a34a',
-                border: 'none',
-                borderRadius: '4px',
-                color: '#ffffff',
-                fontWeight: '800',
-                fontSize: '1.1rem',
-                padding: '16px 20px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 10px rgba(22,163,74,0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                marginTop: '12px',
-                transition: 'background-color 0.2s'
-              }}
-              onMouseOver={e => e.target.style.backgroundColor = '#15803d'}
-              onMouseOut={e => e.target.style.backgroundColor = '#16a34a'}
-            >
-              <Lock size={18} /> Join Now
-            </button>
-          </form>
-        ) : (
-          <div style={{
-            padding: '32px',
-            textAlign: 'center',
-            border: '1.5px dashed #d2dbe5',
-            borderRadius: '4px',
-            backgroundColor: '#f9fbfd'
-          }}>
-            <p style={{ color: '#4a5568', marginBottom: '16px' }}>
-              Click below to complete authorization securely using PayPal.
-            </p>
-            <button 
-              onClick={handleJoin}
-              style={{
-                backgroundColor: '#ffc439',
-                border: 'none',
-                borderRadius: '25px',
-                padding: '12px 32px',
-                cursor: 'pointer',
-                fontStyle: 'italic',
-                fontWeight: '900',
-                fontSize: '1.1rem',
-                color: '#003087',
-                boxShadow: '0 3px 6px rgba(0,0,0,0.06)'
-              }}
-            >
-              Pay<span style={{ color: '#0079C1' }}>Pal</span> Checkout
-            </button>
-          </div>
-        )}
-
-        {/* Safe Banner */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'flex-start', 
-          gap: '12px', 
-          padding: '16px', 
-          backgroundColor: '#f2f6f9', 
-          borderRadius: '4px',
-          borderLeft: '4px solid #13809c',
-          fontSize: '0.85rem',
-          lineHeight: '1.5'
-        }}>
-          <ShieldCheck size={24} style={{ color: '#13809c', flexShrink: 0 }} />
-          <div>
-            <strong style={{ color: '#1f4e5a' }}>30-Day Money-Back Guarantee</strong>
-            <p style={{ color: '#4a5568', marginTop: '2px' }}>
-              If you aren't completely satisfied with your test prep progress, simply request a refund within 30 days of joining. No questions asked.
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Right Column: Plan Summary and telemetry */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="checkout-grid-layout" style={{
+        maxWidth: '1080px',
+        width: '100%',
+        display: 'flex',
+        gap: '40px',
+        justifyContent: 'center'
+      }}>
         
-        {/* Plan Details Card */}
-        <div className="card" style={{ padding: '28px', borderTop: '6px solid #13809c' }}>
-          <h3 style={{ color: '#1f4e5a', fontSize: '1.25rem', marginBottom: '16px', fontWeight: '800' }}>
-            Choose your study plan
-          </h3>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            
-            {/* Plan Option 1: Monthly */}
-            <label 
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                padding: '16px',
-                border: selectedPlan === 'monthly' ? '2px solid #13809c' : '1px solid #d2dbe5',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                backgroundColor: selectedPlan === 'monthly' ? '#f2f6f9' : '#ffffff',
-                transition: 'all 0.2s'
-              }}
-            >
-              <input 
-                type="radio" 
-                name="plan" 
-                checked={selectedPlan === 'monthly'}
-                onChange={() => setSelectedPlan('monthly')}
-                style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#13809c' }}
-              />
-              <div>
-                <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <strong style={{ color: '#1f4e5a' }}>FTCE Test Prep Monthly Pass</strong>
-                  <span style={{ color: '#13809c', fontWeight: '800' }}>$59.99/mo</span>
-                </div>
-                <p style={{ fontSize: '0.82rem', color: '#718096', marginTop: '4px', lineHeight: '1.4' }}>
-                  Complete recurring access to all lessons, guides, video tutorials, and test tools. Cancel online anytime.
-                </p>
-              </div>
-            </label>
-
-            {/* Plan Option 2: 2-Week Study Pass */}
-            <label 
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                padding: '16px',
-                border: selectedPlan === 'twoweek' ? '2px solid #13809c' : '1px solid #d2dbe5',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                backgroundColor: selectedPlan === 'twoweek' ? '#f2f6f9' : '#ffffff',
-                transition: 'all 0.2s'
-              }}
-            >
-              <input 
-                type="radio" 
-                name="plan" 
-                checked={selectedPlan === 'twoweek'}
-                onChange={() => setSelectedPlan('twoweek')}
-                style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#13809c' }}
-              />
-              <div>
-                <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <strong style={{ color: '#1f4e5a' }}>2-Week Intensive pass</strong>
-                  <span style={{ color: '#13809c', fontWeight: '800' }}>$39.99</span>
-                </div>
-                <p style={{ fontSize: '0.82rem', color: '#718096', marginTop: '4px', lineHeight: '1.4' }}>
-                  Two weeks of full, unlimited access. Non-recurring; does not renew automatically.
-                </p>
-              </div>
-            </label>
-
+        {/* Left Column: Payment Details */}
+        <div className="checkout-left-col" style={{
+          flex: '1 1 600px',
+          maxWidth: '600px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px'
+        }}>
+          
+          <div>
+            <h2 style={{
+              fontSize: '1.75rem',
+              fontWeight: '700',
+              color: '#333333',
+              margin: '0 0 10px 0',
+              lineHeight: '1.25'
+            }}>
+              Last step! To create your account, enter your payment info below.
+            </h2>
+            <p style={{
+              fontSize: '0.98rem',
+              color: '#16a34a',
+              fontWeight: '600',
+              margin: 0
+            }}>
+              Don't worry, we'll email you right away with all the details.
+            </p>
           </div>
 
-          {/* Pricing Total */}
-          <div style={{ 
-            marginTop: '24px', 
-            paddingTop: '16px', 
-            borderTop: '1px solid #d2dbe5',
-            display: 'flex', 
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            color: '#1f4e5a'
+          {/* Guidelines Bullet points */}
+          <ul style={{
+            margin: 0,
+            paddingLeft: '20px',
+            color: '#4a5568',
+            fontSize: '0.92rem',
+            lineHeight: '1.6',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
           }}>
-            <span style={{ fontWeight: '700' }}>Total Due Today:</span>
-            <span style={{ fontSize: '1.5rem', fontWeight: '900', color: '#13809c' }}>
-              {selectedPlan === 'monthly' ? '$59.99' : '$39.99'}
+            <li>You are free to cancel online, anytime, with just a few simple clicks</li>
+            <li>And if you have any questions, you can reach out anytime</li>
+          </ul>
+
+          {/* Payment Method Selector Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#4a5568' }}>
+              Choose your payment option below
+            </span>
+            <a 
+              href="#" 
+              onClick={(e) => { e.preventDefault(); alert("We ask for billing details to prevent service gaps and verify authorized usage for your risk-free study trial. You will not be charged if you cancel before the trial period ends."); }}
+              style={{ fontSize: '0.88rem', color: '#00829a', textDecoration: 'underline' }}
+            >
+              Why do I need to enter my payment info?
+            </a>
+
+            {/* Credit Card / PayPal Toggle Boxes */}
+            <div className="payment-toggle-container" style={{
+              display: 'flex',
+              gap: '16px',
+              marginTop: '8px'
+            }}>
+              
+              {/* Credit Card Box */}
+              <div 
+                onClick={() => setPaymentMethod('card')}
+                style={{
+                  flex: 1,
+                  border: '1.5px solid #ccd6e0',
+                  borderRadius: '4px',
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  cursor: 'pointer',
+                  backgroundColor: paymentMethod === 'card' ? '#eef6f8' : '#ffffff',
+                  borderColor: paymentMethod === 'card' ? '#00829a' : '#ccd6e0',
+                  transition: 'all 0.15s'
+                }}
+              >
+                <input 
+                  type="radio" 
+                  checked={paymentMethod === 'card'} 
+                  onChange={() => setPaymentMethod('card')}
+                  style={{ width: '18px', height: '18px', accentColor: '#00829a', cursor: 'pointer' }}
+                />
+                <span style={{ fontWeight: '700', color: '#2d3748', fontSize: '0.95rem' }}>Credit Card</span>
+              </div>
+
+              {/* PayPal Box */}
+              <div 
+                onClick={() => setPaymentMethod('paypal')}
+                style={{
+                  flex: 1,
+                  border: '1.5px solid #ccd6e0',
+                  borderRadius: '4px',
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  cursor: 'pointer',
+                  backgroundColor: paymentMethod === 'paypal' ? '#eef6f8' : '#ffffff',
+                  borderColor: paymentMethod === 'paypal' ? '#00829a' : '#ccd6e0',
+                  transition: 'all 0.15s'
+                }}
+              >
+                <input 
+                  type="radio" 
+                  checked={paymentMethod === 'paypal'} 
+                  onChange={() => setPaymentMethod('paypal')}
+                  style={{ width: '18px', height: '18px', accentColor: '#00829a', cursor: 'pointer' }}
+                />
+                {/* PayPal Styled Text Logo */}
+                <span style={{ fontStyle: 'italic', fontWeight: '900', color: '#003087', fontSize: '0.95rem', display: 'flex', alignItems: 'center' }}>
+                  Pay<span style={{ color: '#0079C1' }}>Pal</span>
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Form Area */}
+          {paymentMethod === 'card' ? (
+            <form onSubmit={handleJoin} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px'
+            }}>
+              
+              {/* Card Number Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '700', color: '#1f4e5a' }}>Card Number</label>
+                  <span 
+                    onClick={() => setShowCouponInput(!showCouponInput)}
+                    style={{ fontSize: '0.85rem', color: '#00829a', cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    Have a Coupon Code?
+                  </span>
+                </div>
+                
+                {showCouponInput && (
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Enter Coupon Code"
+                      value={couponCode}
+                      onChange={e => setCouponCode(e.target.value)}
+                      style={{
+                        flex: 1,
+                        padding: '10px 14px',
+                        border: '1.5px solid #ccd6e0',
+                        borderRadius: '4px',
+                        fontSize: '0.9rem',
+                        outline: 'none'
+                      }}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => alert("Coupon code applied successfully!")}
+                      style={{
+                        backgroundColor: '#00829a',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '0 16px',
+                        fontWeight: '700',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                )}
+
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Credit Card Number"
+                    value={cardDetails.number}
+                    onChange={e => setCardDetails({ ...cardDetails, number: e.target.value })}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 130px 12px 16px',
+                      border: '1.5px solid #ccd6e0',
+                      borderRadius: '4px',
+                      fontSize: '0.95rem',
+                      outline: 'none',
+                      backgroundColor: '#ffffff',
+                      color: '#222222'
+                    }}
+                    className="input-focus-effect"
+                  />
+                  {/* Card logos */}
+                  <div style={{
+                    position: 'absolute',
+                    right: '12px',
+                    display: 'flex',
+                    gap: '4px',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ fontSize: '9px', padding: '1.5px 3px', border: '1px solid #ccd6e0', borderRadius: '2px', fontWeight: '800', color: '#1A1F71', backgroundColor: '#ffffff' }}>VISA</span>
+                    <span style={{ fontSize: '9px', padding: '1.5px 3px', border: '1px solid #ccd6e0', borderRadius: '2px', fontWeight: '800', color: '#EB001B', backgroundColor: '#ffffff' }}>MC</span>
+                    <span style={{ fontSize: '9px', padding: '1.5px 3px', border: '1px solid #ccd6e0', borderRadius: '2px', fontWeight: '800', color: '#0173B2', backgroundColor: '#ffffff' }}>AMEX</span>
+                    <span style={{ fontSize: '9px', padding: '1.5px 3px', border: '1px solid #ccd6e0', borderRadius: '2px', fontWeight: '800', color: '#FF5F00', backgroundColor: '#ffffff' }}>DISC</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expiry and CVC Row */}
+              <div className="grid-2-mobile-stack" style={{
+                display: 'grid',
+                gridTemplateColumns: '2fr 1fr',
+                gap: '16px'
+              }}>
+                
+                {/* Expiry selectors */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: '700', color: '#1f4e5a' }}>Expiration</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <select
+                      value={cardDetails.expiryMonth}
+                      onChange={e => setCardDetails({ ...cardDetails, expiryMonth: e.target.value })}
+                      style={{
+                        flex: 1,
+                        padding: '12px 16px',
+                        border: '1.5px solid #ccd6e0',
+                        borderRadius: '4px',
+                        fontSize: '0.95rem',
+                        backgroundColor: '#ffffff',
+                        cursor: 'pointer',
+                        outline: 'none'
+                      }}
+                    >
+                      <option disabled>Month</option>
+                      {months.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                    <select
+                      value={cardDetails.expiryYear}
+                      onChange={e => setCardDetails({ ...cardDetails, expiryYear: e.target.value })}
+                      style={{
+                        flex: 1,
+                        padding: '12px 16px',
+                        border: '1.5px solid #ccd6e0',
+                        borderRadius: '4px',
+                        fontSize: '0.95rem',
+                        backgroundColor: '#ffffff',
+                        cursor: 'pointer',
+                        outline: 'none'
+                      }}
+                    >
+                      <option disabled>Year</option>
+                      {years.map(y => <option key={y} value={y}>{y}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                {/* CVC Input */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <label style={{ fontSize: '0.9rem', fontWeight: '700', color: '#1f4e5a' }}>CVC</label>
+                    <svg 
+                      onClick={() => alert("The CVC (Card Verification Code) is the 3-digit number printed on the back of VISA/MC cards, or the 4-digit code on the front of AMEX cards.")}
+                      width="13" 
+                      height="13" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="#4a5568" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      style={{ cursor: 'pointer', opacity: 0.8 }}
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  </div>
+                  <input 
+                    type="password" 
+                    placeholder="CVC"
+                    value={cardDetails.cvc}
+                    onChange={e => setCardDetails({ ...cardDetails, cvc: e.target.value })}
+                    required
+                    maxLength="4"
+                    style={{
+                      padding: '12px 16px',
+                      border: '1.5px solid #ccd6e0',
+                      borderRadius: '4px',
+                      fontSize: '0.95rem',
+                      outline: 'none',
+                      backgroundColor: '#ffffff',
+                      color: '#222222'
+                    }}
+                    className="input-focus-effect"
+                  />
+                </div>
+
+              </div>
+
+              {/* Consent Text */}
+              <p style={{
+                fontSize: '0.82rem',
+                color: '#718096',
+                lineHeight: '1.5',
+                margin: '8px 0 0 0'
+              }}>
+                By creating an account, you agree to Study.com's <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Terms of Use</a> and <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Privacy Policy</a>.
+              </p>
+
+              {/* Submit Button */}
+              <div>
+                <button
+                  type="submit"
+                  style={{
+                    background: 'linear-gradient(to bottom, #22c55e, #16a34a)',
+                    border: 'none',
+                    borderRadius: '4px',
+                    color: '#ffffff',
+                    fontWeight: '700',
+                    fontSize: '1.15rem',
+                    padding: '12px 48px',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 5px rgba(22, 163, 74, 0.2)',
+                    transition: 'opacity 0.2s'
+                  }}
+                  onMouseOver={e => e.target.style.opacity = '0.9'}
+                  onMouseOut={e => e.target.style.opacity = '1'}
+                >
+                  Join Now
+                </button>
+              </div>
+
+            </form>
+          ) : (
+            /* PayPal Checkout Container */
+            <div style={{
+              backgroundColor: '#ffffff',
+              border: '1.5px dashed #ccd6e0',
+              borderRadius: '6px',
+              padding: '40px 24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <p style={{ color: '#4a5568', fontSize: '0.95rem', margin: 0 }}>
+                Click below to complete authorization securely using PayPal.
+              </p>
+              <button 
+                onClick={handleJoin}
+                style={{
+                  backgroundColor: '#ffc439',
+                  border: 'none',
+                  borderRadius: '25px',
+                  padding: '12px 36px',
+                  cursor: 'pointer',
+                  fontStyle: 'italic',
+                  fontWeight: '900',
+                  fontSize: '1.1rem',
+                  color: '#003087',
+                  boxShadow: '0 3px 6px rgba(0,0,0,0.06)'
+                }}
+              >
+                Pay<span style={{ color: '#0079C1' }}>Pal</span> Checkout
+              </button>
+            </div>
+          )}
+
+          {/* Back button */}
+          <div>
+            <span
+              onClick={onBack}
+              style={{
+                color: '#00829a',
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              }}
+            >
+              back
             </span>
           </div>
 
         </div>
 
-        {/* Circular Telemetry Card */}
-        <div className="card" style={{ padding: '24px', backgroundColor: '#f2f6f9', display: 'flex', alignItems: 'center', gap: '20px' }}>
+        {/* Right Column: Selected Plan Card & 92% pass badge */}
+        <div className="checkout-right-col" style={{
+          flex: '0 0 350px',
+          maxWidth: '350px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px'
+        }}>
+          
+          {/* Plan selection card */}
           <div style={{
-            width: '64px',
-            height: '64px',
-            borderRadius: '50%',
             backgroundColor: '#ffffff',
-            border: '4px solid #10b981',
+            borderRadius: '6px',
+            border: '1.5px solid #e2e8f0',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            
+            <div>
+              <span style={{
+                fontSize: '0.78rem',
+                fontWeight: '700',
+                color: '#718096',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Your Selected Plan
+              </span>
+              <h3 style={{
+                fontSize: '1.35rem',
+                fontWeight: '700',
+                color: '#1f4e5a',
+                margin: '4px 0 0 0'
+              }}>
+                {courseTitle}
+              </h3>
+            </div>
+
+            {/* Money back guarantee */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#16a34a',
+              fontSize: '0.88rem',
+              fontWeight: '700'
+            }}>
+              <span>30-day money back guarantee</span>
+              <svg 
+                onClick={() => alert("Try our service for 30 days risk-free. If it isn't for you, get a full refund. No hassles.")}
+                width="14" 
+                height="14" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="#16a34a" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                style={{ cursor: 'pointer', opacity: 0.9 }}
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+
+            {/* Radio inputs for pricing */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              
+              {/* Option 1: Monthly */}
+              <label style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px',
+                cursor: 'pointer',
+                padding: '12px',
+                border: '1.5px solid #ccd6e0',
+                borderRadius: '4px',
+                backgroundColor: selectedPlan === 'monthly' ? '#eef6f8' : 'transparent',
+                borderColor: selectedPlan === 'monthly' ? '#00829a' : '#ccd6e0',
+                transition: 'all 0.15s'
+              }}>
+                <input 
+                  type="radio"
+                  name="studyPlan"
+                  checked={selectedPlan === 'monthly'}
+                  onChange={() => setSelectedPlan('monthly')}
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    accentColor: '#00829a',
+                    marginTop: '3px',
+                    cursor: 'pointer'
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Monthly access</span>
+                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$59.99<span style={{ fontSize: '0.75rem', fontWeight: '500', color: '#718096' }}>/mo</span></span>
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#718096', fontStyle: 'italic', marginTop: '2px' }}>
+                    Just $2.00/day (+ tax if applicable)
+                  </div>
+                </div>
+              </label>
+
+              {/* Option 2: 2-Week access */}
+              <label style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px',
+                cursor: 'pointer',
+                padding: '12px',
+                border: '1.5px solid #ccd6e0',
+                borderRadius: '4px',
+                backgroundColor: selectedPlan === 'twoweek' ? '#eef6f8' : 'transparent',
+                borderColor: selectedPlan === 'twoweek' ? '#00829a' : '#ccd6e0',
+                transition: 'all 0.15s'
+              }}>
+                <input 
+                  type="radio"
+                  name="studyPlan"
+                  checked={selectedPlan === 'twoweek'}
+                  onChange={() => setSelectedPlan('twoweek')}
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    accentColor: '#00829a',
+                    marginTop: '3px',
+                    cursor: 'pointer'
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Two week access</span>
+                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$39.99</span>
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#718096', marginTop: '2px' }}>
+                    Renews on {getRenewalDateStr()} for $59.99/mo
+                  </div>
+                </div>
+              </label>
+
+            </div>
+
+          </div>
+
+          {/* 92% passed telemetry badge */}
+          <div style={{
+            backgroundColor: '#ffffff',
+            borderRadius: '6px',
+            border: '1.5px solid #e2e8f0',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+            padding: '24px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: '900',
-            fontSize: '1.15rem',
-            color: '#1f4e5a',
-            flexShrink: 0
+            gap: '16px'
           }}>
-            92%
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              backgroundColor: '#00829a',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.15rem',
+              fontWeight: '800',
+              color: '#ffffff',
+              flexShrink: 0
+            }}>
+              92%
+            </div>
+            <div>
+              <p style={{
+                fontSize: '0.88rem',
+                lineHeight: '1.4',
+                color: '#4a5568',
+                margin: 0
+              }}>
+                of students <strong style={{ color: '#e15b3e', fontWeight: '700' }}>passed their exam</strong> after using PrepSummit.com*
+              </p>
+            </div>
           </div>
-          <div>
-            <strong style={{ color: '#1f4e5a', display: 'block', fontSize: '0.95rem' }}>Pass your test the first time</strong>
-            <p style={{ fontSize: '0.82rem', color: '#4a5568', marginTop: '2px', lineHeight: '1.4' }}>
-              Over 92% of PrepSummit.com students pass their FTCE Florida teacher certification exams on their very first attempt!
-            </p>
-          </div>
-        </div>
 
-        {/* Testimonials snippet */}
-        <div className="card" style={{ padding: '24px' }}>
-          <p style={{ fontStyle: 'italic', fontSize: '0.88rem', color: '#4a5568', lineHeight: '1.5' }}>
-            "The practice tests were exactly aligned with what was on my FTCE Professional Education Test. I was so anxious, but the lessons broke concepts down beautifully. I passed on my first try!"
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ffb627' }} />
-            <strong style={{ fontSize: '0.82rem', color: '#1f4e5a' }}>Sarah M. — Florida Certified Teacher</strong>
-          </div>
         </div>
 
       </div>

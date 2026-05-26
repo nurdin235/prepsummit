@@ -1033,6 +1033,19 @@ button, input, select {
   .top-card {
     display: flex !important;
   }
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block !important;
+  }
+}
+
+.desktop-only {
+  display: block;
+}
+.mobile-only {
+  display: none;
 }
 
 .mobile-only-tabs {
@@ -1089,3 +1102,296 @@ button, input, select {
   padding-bottom: 16px;
   cursor: pointer;
 }
+
+/* Custom Dropdown Option Hover Styles */
+.dropdown-item-hover:hover {
+  background-color: #edf7f9 !important;
+  color: #0c2330 !important;
+}
+
+/* Custom Scrollbar for Dropdowns */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e5;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Mobile Image Height collapse fix */
+@media (max-width: 768px) {
+  .mobile-min-height-img {
+    height: 280px !important;
+    min-height: 280px !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+}
+
+/* Global Overlay Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+  animation: modalFadeIn 0.25s ease-out forwards;
+}
+
+.modal-container {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-light);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalScaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-tertiary);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--bg-tertiary);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Chatbot Styles */
+.chatbot-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(19, 128, 156, 0.35);
+  cursor: pointer;
+  z-index: 1500;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.chatbot-bubble:hover {
+  transform: scale(1.08);
+  background-color: var(--primary-hover);
+}
+
+.chatbot-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 380px;
+  height: 480px;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1500;
+  animation: modalScaleUp 0.2s ease-out forwards;
+}
+
+.chat-input {
+  border: 1px solid var(--border-light);
+  outline: none;
+  font-family: var(--font-body);
+  transition: border-color 0.2s;
+}
+.chat-input:focus {
+  border-color: var(--primary);
+}
+
+@media (max-width: 480px) {
+  .chatbot-window {
+    width: calc(100% - 32px);
+    height: 450px;
+    bottom: 84px;
+    right: 16px;
+  }
+  .chatbot-bubble {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* Navigation Dual-Pane Dropdown Menu Replica */
+.nav-dropdown-pane {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 640px;
+  background-color: #ffffff;
+  border: 1px solid #d2dbe5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  display: flex;
+  z-index: 999;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease-out forwards;
+}
+
+.dark-theme .nav-dropdown-pane {
+  background-color: #121620;
+  border-color: #2a3547;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.nav-dropdown-pane.align-right {
+  left: auto;
+  right: 0;
+}
+
+.nav-dropdown-left {
+  width: 250px;
+  background-color: #f7fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark-theme .nav-dropdown-left {
+  background-color: #181d28;
+  border-right-color: #2a3547;
+}
+
+.nav-dropdown-right {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.dark-theme .nav-dropdown-right {
+  background-color: #121620;
+}
+
+.nav-dropdown-cat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #2d3748;
+  border-left: 4px solid transparent;
+  transition: all 0.15s;
+}
+
+.dark-theme .nav-dropdown-cat-item {
+  color: #cbd5e1;
+}
+
+.nav-dropdown-cat-item:hover {
+  background-color: #edf2f7;
+}
+
+.dark-theme .nav-dropdown-cat-item:hover {
+  background-color: #1e2533;
+}
+
+.nav-dropdown-cat-item.active {
+  background-color: #ffffff;
+  color: #13809c;
+  border-left-color: #13809c;
+}
+
+.dark-theme .nav-dropdown-cat-item.active {
+  background-color: #121620;
+  color: #ffb627;
+  border-left-color: #ffb627;
+}
+
+.nav-dropdown-sub-item {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dark-theme .nav-dropdown-sub-item {
+  color: #94a3b8;
+}
+
+.nav-dropdown-sub-item:hover {
+  background-color: rgba(19, 128, 156, 0.08);
+  color: #13809c;
+  transform: translateX(2px);
+}
+
+.dark-theme .nav-dropdown-sub-item:hover {
+  background-color: rgba(255, 182, 39, 0.08);
+  color: #ffb627;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

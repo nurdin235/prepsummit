@@ -3,16 +3,17 @@ import { Search, Star, BookOpen, Filter } from 'lucide-react';
 
 export default function CourseCatalog({ courses, searchQuery, setSearchQuery, onSelectCourse }) {
   // Levels selected in checkboxes
-  const [selectedLevels, setSelectedLevels] = useState(['Teacher Certification', 'Advanced Placement', 'College Prep', 'Introductory']);
-
   const levelsList = [
     'Elementary School',
     'Middle School',
     'High School',
     'Advanced Placement',
     'College Prep',
-    'Teacher Certification'
+    'Teacher Certification',
+    'Introductory'
   ];
+
+  const [selectedLevels, setSelectedLevels] = useState(levelsList);
 
   const handleLevelToggle = (level) => {
     setSelectedLevels(prev => {

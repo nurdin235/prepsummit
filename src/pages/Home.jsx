@@ -1,17 +1,188 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronRight, ChevronDown, Search, Briefcase, Lightbulb, GraduationCap, ListPlus, Clock } from 'lucide-react';
+
+// Custom Dropdown Component to mirror study.com's custom dropdowns
+function CardDropdown({ placeholder, sections, onSelect, openUpwards = false, isOpen, onToggle }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        if (isOpen) {
+          onToggle(false);
+        }
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onToggle]);
+
+  return (
+    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+      {/* Trigger Button */}
+      <div 
+        onClick={() => onToggle(!isOpen)}
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          borderRadius: '6px',
+          border: '1.5px solid #d2dbe5',
+          backgroundColor: '#ffffff',
+          color: '#222222',
+          fontSize: '0.88rem',
+          fontWeight: '600',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
+          userSelect: 'none',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+          height: '46px'
+        }}
+      >
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '85%', color: '#4a5568', fontWeight: '500' }}>
+          {placeholder}
+        </span>
+        <ChevronDown size={16} style={{ color: '#718096', transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+      </div>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div 
+          className="custom-scrollbar"
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            backgroundColor: '#ffffff',
+            border: '1.5px solid #cbd5e1',
+            borderRadius: '6px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+            zIndex: 1000,
+            maxHeight: '250px',
+            overflowY: 'auto',
+            padding: '6px 0',
+            ...(openUpwards ? { bottom: 'calc(100% + 4px)' } : { top: 'calc(100% + 4px)' })
+          }}
+        >
+          {sections.map((section, sIdx) => (
+            <div key={sIdx}>
+              {section.header && (
+                <div style={{
+                  padding: '8px 16px 4px 16px',
+                  fontSize: '0.75rem',
+                  fontWeight: '800',
+                  color: '#64748b',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  backgroundColor: '#f8fafc',
+                  borderTop: sIdx > 0 ? '1px solid #f1f5f9' : 'none',
+                  borderBottom: '1px solid #f1f5f9',
+                  marginBottom: '4px'
+                }}>
+                  {section.header}
+                </div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {section.options.map((option, oIdx) => (
+                  <div
+                    key={oIdx}
+                    className="dropdown-item-hover"
+                    onClick={() => {
+                      onSelect(option);
+                      onToggle(false);
+                    }}
+                    style={{
+                      padding: '10px 20px',
+                      fontSize: '0.88rem',
+                      color: '#13809c',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Home({ 
   courses, 
   setActivePage, 
   setSearchQuery, 
-  onSelectCourse 
+  onSelectCourse,
+  onStartSignup,
+  onSelectCategoryLanding
 }) {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [activeTab, setActiveTab] = useState('simplified');
   const [activeVideoTab, setActiveVideoTab] = useState('instruction');
   const [activeContentTab, setActiveContentTab] = useState('subjects');
   const [activeTopTab, setActiveTopTab] = useState(0);
+  const [activeDropdownIdx, setActiveDropdownIdx] = useState(null);
+  const [localSearch, setLocalSearch] = useState('');
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!localSearch.trim()) return;
+    const query = localSearch.trim().toLowerCase();
+    setSearchQuery(localSearch);
+    if (query.includes('ftce') || query === 'ped') {
+      setActivePage('ftce');
+    } else {
+      setActivePage('catalog');
+    }
+  };
+
+  const handleDropdownSelect = (optionText) => {
+    const opt = optionText.toLowerCase();
+    if (opt === 'teacher certification' || opt.includes('ftce') || opt === 'teacher certification exams') {
+      setActivePage('ftce');
+    } else if (opt === 'business') {
+      onSelectCategoryLanding('subject-business');
+    } else if (opt === 'math' || opt === 'math worksheets') {
+      onSelectCategoryLanding('subject-math');
+    } else if (opt === 'science') {
+      onSelectCategoryLanding('subject-science');
+    } else if (opt === 'english') {
+      onSelectCategoryLanding('subject-english');
+    } else if (opt === 'psychology') {
+      onSelectCategoryLanding('subject-humanities');
+    } else if (opt === 'history' || opt === 'social science') {
+      onSelectCategoryLanding('subject-humanities');
+    } else if (opt === 'nursing exams' || opt.includes('health') || opt === 'nclex') {
+      setSearchQuery('NCLEX');
+      setActivePage('catalog');
+    } else if (opt === 'real estate exams') {
+      setSearchQuery('Real Estate');
+      setActivePage('catalog');
+    } else if (opt === 'military exams' || opt.includes('asvab')) {
+      setSearchQuery('ASVAB');
+      setActivePage('catalog');
+    } else if (opt === 'counseling & social work exams' || opt.includes('hr & finance')) {
+      setSearchQuery('Praxis');
+      setActivePage('catalog');
+    } else if (opt === 'overview' || opt === 'transfer' || opt === 'pricing' || opt === 'what is ace/nccrs?' || opt === 'earn credit') {
+      onSelectCategoryLanding('college-credit');
+    } else if (opt.includes('elementary') || opt.includes('middle') || opt.includes('high') || opt.includes('college') || opt.includes('grad') || opt.includes('adult') || opt.includes('certificates') || opt.includes('professional development') || opt.includes('lesson plans')) {
+      onSelectCategoryLanding('teacher-resources');
+    } else {
+      setSearchQuery(optionText);
+      setActivePage('catalog');
+    }
+  };
+
+
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', fontFamily: "var(--font-body)", overflowX: 'hidden' }}>
@@ -23,9 +194,9 @@ export default function Home({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '80px 24px 120px 24px',
+        padding: '60px 24px 180px 24px',
         overflow: 'hidden',
-        minHeight: 'calc(100vh - 68px)'
+        width: '100%'
       }}>
         
         {/* Left Asterisk */}
@@ -141,7 +312,7 @@ export default function Home({
               </div>
             </div>
             <button 
-              onClick={() => setActivePage('signup')}
+              onClick={() => onStartSignup()}
               style={{ 
                 backgroundColor: '#ffb627', 
                 color: '#000000', 
@@ -163,7 +334,18 @@ export default function Home({
               Create an account
             </button>
           </div>
+        </div>
+      </section>
 
+      {/* 2. MAIN CONTENT AREA (Cards overlap) */}
+      <section style={{ backgroundColor: '#ffffff', width: '100%' }}>
+        <div style={{ 
+          maxWidth: '1150px', 
+          margin: '-120px auto 0 auto', 
+          position: 'relative', 
+          zIndex: 3, 
+          padding: '0 24px' 
+        }}>
           <div className="mobile-only-tabs" style={{ 
             display: 'flex', 
             overflowX: 'auto', 
@@ -190,29 +372,28 @@ export default function Home({
             <div className={`top-card ${activeTopTab === 0 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600" 
                     alt="Study for class" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 0 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -223,38 +404,29 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('catalog')}
                   >
-                    Study for class <ChevronRight size={24} />
+                    Study for class <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Master new concepts with helpful video lessons, practice questions and step-by-step answer explanations.
                   </p>
                 </div>
               </div>
               
               {/* Dropdown Box */}
-              <div style={{ padding: '0 24px 32px 24px', position: 'relative' }}>
-                <select 
-                  onChange={() => setActivePage('catalog')}
-                  style={{
-                    appearance: 'none',
-                    width: '100%',
-                    padding: '16px 20px',
-                    borderRadius: '6px',
-                    border: '1px solid #d2dbe5',
-                    backgroundColor: '#ffffff',
-                    color: '#718096',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Explore our programs</option>
-                  <option value="ap">AP Courses</option>
-                  <option value="college">College Prep</option>
-                </select>
-                <div style={{ position: 'absolute', right: '40px', top: '18px', pointerEvents: 'none', color: '#718096' }}>
-                  <ChevronDown size={20} />
-                </div>
+              <div style={{ padding: '0 20px 24px 20px', position: 'relative' }}>
+                <CardDropdown
+                  placeholder="Explore our programs"
+                  sections={[
+                    {
+                      header: "Subjects",
+                      options: ["Business", "English", "History", "Math", "Psychology", "Science", "Social science"]
+                    }
+                  ]}
+                  onSelect={handleDropdownSelect}
+                  openUpwards={true}
+                  isOpen={activeDropdownIdx === 0}
+                  onToggle={(open) => setActiveDropdownIdx(open ? 0 : null)}
+                />
               </div>
             </div>
 
@@ -262,29 +434,28 @@ export default function Home({
             <div className={`top-card ${activeTopTab === 1 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600" 
                     alt="Ace your test prep" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 1 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -295,38 +466,37 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('ftce')}
                   >
-                    Ace your test prep <ChevronRight size={24} />
+                    Ace your test prep <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     92% pass rate. Prep for 1,500+ exams with custom study guides, practice tests and video lessons.
                   </p>
                 </div>
               </div>
               
               {/* Dropdown Box */}
-              <div style={{ padding: '0 24px 32px 24px', position: 'relative' }}>
-                <select 
-                  onChange={() => setActivePage('ftce')}
-                  style={{
-                    appearance: 'none',
-                    width: '100%',
-                    padding: '16px 20px',
-                    borderRadius: '6px',
-                    border: '1px solid #d2dbe5',
-                    backgroundColor: '#ffffff',
-                    color: '#718096',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Explore our programs</option>
-                  <option value="ftce">FTCE Professional Education</option>
-                  <option value="praxis">Praxis Core</option>
-                </select>
-                <div style={{ position: 'absolute', right: '40px', top: '18px', pointerEvents: 'none', color: '#718096' }}>
-                  <ChevronDown size={20} />
-                </div>
+              <div style={{ padding: '0 20px 24px 20px', position: 'relative' }}>
+                <CardDropdown
+                  placeholder="Explore our programs"
+                  sections={[
+                    {
+                      header: "Professional Certifications & Licensing",
+                      options: [
+                        "Teacher Certification Exams",
+                        "Nursing Exams",
+                        "Allied Health & Medical Exams",
+                        "Real Estate Exams",
+                        "Counseling & Social Work Exams",
+                        "HR & Finance Exams",
+                        "Military Exams"
+                      ]
+                    }
+                  ]}
+                  onSelect={handleDropdownSelect}
+                  openUpwards={true}
+                  isOpen={activeDropdownIdx === 1}
+                  onToggle={(open) => setActiveDropdownIdx(open ? 1 : null)}
+                />
               </div>
             </div>
 
@@ -334,29 +504,28 @@ export default function Home({
             <div className={`top-card ${activeTopTab === 2 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=600" 
                     alt="Earn college credit" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 2 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -367,126 +536,106 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('catalog')}
                   >
-                    Earn college credit <ChevronRight size={24} />
+                    Earn college credit <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Save time and money on 220+ upper and lower-division courses and skip what you already know.
                   </p>
                 </div>
               </div>
               
               {/* Dropdown Box */}
-              <div style={{ padding: '0 24px 32px 24px', position: 'relative' }}>
-                <select 
-                  onChange={() => setActivePage('catalog')}
-                  style={{
-                    appearance: 'none',
-                    width: '100%',
-                    padding: '16px 20px',
-                    borderRadius: '6px',
-                    border: '1px solid #d2dbe5',
-                    backgroundColor: '#ffffff',
-                    color: '#718096',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Explore our programs</option>
-                  <option value="bio">Biology 101</option>
-                  <option value="psych">Psychology 101</option>
-                </select>
-                <div style={{ position: 'absolute', right: '40px', top: '18px', pointerEvents: 'none', color: '#718096' }}>
-                  <ChevronDown size={20} />
-                </div>
+              <div style={{ padding: '0 20px 24px 20px', position: 'relative' }}>
+                <CardDropdown
+                  placeholder="Explore our programs"
+                  sections={[
+                    {
+                      header: "How it works",
+                      options: ["Overview", "Transfer", "Pricing", "What is ACE/NCCRS?", "Earn credit"]
+                    }
+                  ]}
+                  onSelect={handleDropdownSelect}
+                  openUpwards={true}
+                  isOpen={activeDropdownIdx === 2}
+                  onToggle={(open) => setActiveDropdownIdx(open ? 2 : null)}
+                />
               </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* 3. SEARCH SECTION (Moved up) */}
-      <section style={{ padding: '60px 24px 20px 24px', width: '100%', backgroundColor: '#ffffff' }}>
-        <div style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          textAlign: 'center',
-          background: 'linear-gradient(90deg, #f1f3e6 0%, #e2f5f7 100%)',
-          borderRadius: '12px',
-          padding: '80px 24px'
-        }}>
-          <h2 style={{ 
-            fontSize: '2.8rem', 
-            color: '#000000', 
-            fontFamily: "var(--font-heading), sans-serif", 
-            fontWeight: '900', 
-            marginBottom: '36px', 
-            letterSpacing: '-0.02em' 
-          }}>
-            What do you want to learn today?
-          </h2>
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              setActivePage('catalog');
-            }}
-            style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}
-          >
-            <div style={{ position: 'absolute', left: '24px', top: '22px', color: '#000000' }}>
-              <Search size={24} strokeWidth={2.5} />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search Courses & Lessons" 
-              style={{ 
+            {/* Mobile-only Search Section (Inside Grid) */}
+            <div className="mobile-only">
+              <div style={{ 
                 width: '100%', 
-                padding: '22px 24px 22px 64px', 
-                borderRadius: '8px', 
-                border: '1.5px solid #d2dbe5', 
-                fontSize: '1.15rem', 
-                outline: 'none', 
-                boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
-                fontFamily: "var(--font-body)",
-                color: '#222222'
-              }} 
-            />
-          </form>
-        </div>
-      </section>
-
-      {/* CARDS 4-6 GRID */}
-      <section style={{ padding: '20px 24px 60px 24px', width: '100%', backgroundColor: '#ffffff' }}>
-        <div style={{ maxWidth: '1150px', margin: '0 auto', position: 'relative', zIndex: 3, width: '100%' }}>
-          <div className="responsive-grid-3 hero-cards-container">
+                textAlign: 'center',
+                background: 'linear-gradient(90deg, #f1f3e6 0%, #e2f5f7 100%)',
+                borderRadius: '12px',
+                padding: '40px 24px',
+                margin: '16px 0'
+              }}>
+                <h2 style={{ 
+                  fontSize: '2.2rem', 
+                  color: '#000000', 
+                  fontFamily: "var(--font-heading), sans-serif", 
+                  fontWeight: '900', 
+                  marginBottom: '24px', 
+                  letterSpacing: '-0.02em' 
+                }}>
+                  What do you want to learn today?
+                </h2>
+                <form 
+                  onSubmit={handleSearchSubmit}
+                  style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}
+                >
+                  <div style={{ position: 'absolute', left: '24px', top: '22px', color: '#000000' }}>
+                    <Search size={24} strokeWidth={2.5} />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Search Courses & Lessons" 
+                    value={localSearch}
+                    onChange={e => setLocalSearch(e.target.value)}
+                    style={{ 
+                      width: '100%', 
+                      padding: '22px 24px 22px 64px', 
+                      borderRadius: '8px', 
+                      border: '1.5px solid #d2dbe5', 
+                      fontSize: '1.15rem', 
+                      outline: 'none', 
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                      fontFamily: "var(--font-body)",
+                      color: '#222222'
+                    }} 
+                  />
+                </form>
+              </div>
+            </div>
 
             {/* Card 4: Teach your class */}
             <div className={`top-card ${activeTopTab === 3 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1544531586-fde5298cdd43?auto=format&fit=crop&q=80&w=600" 
                     alt="Teach your class" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 3 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -497,38 +646,43 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('catalog')}
                   >
-                    Teach your class <ChevronRight size={24} />
+                    Teach your class <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Plan lessons with ease using state-standard-aligned videos and practice for all K-12 subjects.
                   </p>
                 </div>
               </div>
               
               {/* Dropdown Box */}
-              <div style={{ padding: '0 24px 32px 24px', position: 'relative' }}>
-                <select 
-                  onChange={() => setActivePage('catalog')}
-                  style={{
-                    appearance: 'none',
-                    width: '100%',
-                    padding: '16px 20px',
-                    borderRadius: '6px',
-                    border: '1px solid #d2dbe5',
-                    backgroundColor: '#ffffff',
-                    color: '#718096',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Select subject or resource</option>
-                  <option value="math">Mathematics</option>
-                  <option value="science">Science</option>
-                </select>
-                <div style={{ position: 'absolute', right: '40px', top: '18px', pointerEvents: 'none', color: '#718096' }}>
-                  <ChevronDown size={20} />
-                </div>
+              <div style={{ padding: '0 20px 24px 20px', position: 'relative' }}>
+                <CardDropdown
+                  placeholder="Select subject or resource"
+                  sections={[
+                    {
+                      header: "Leveled lessons",
+                      options: [
+                        "Elementary school",
+                        "Middle school",
+                        "High school",
+                        "College",
+                        "Grad & post-grad",
+                        "Certificates",
+                        "Adult education",
+                        "Professional development",
+                        "Teacher certification"
+                      ]
+                    },
+                    {
+                      header: "Plans and worksheets",
+                      options: ["Lesson plans", "Math worksheets"]
+                    }
+                  ]}
+                  onSelect={handleDropdownSelect}
+                  openUpwards={false}
+                  isOpen={activeDropdownIdx === 3}
+                  onToggle={(open) => setActiveDropdownIdx(open ? 3 : null)}
+                />
               </div>
             </div>
 
@@ -536,29 +690,28 @@ export default function Home({
             <div className={`top-card ${activeTopTab === 4 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=600" 
                     alt="Homeschool your child" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 4 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -569,38 +722,33 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('catalog')}
                   >
-                    Homeschool your child <ChevronRight size={24} />
+                    Homeschool your child <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Earn certificates of completion and potential college credit with full 6-12 curriculum.
                   </p>
                 </div>
               </div>
               
               {/* Dropdown Box */}
-              <div style={{ padding: '0 24px 32px 24px', position: 'relative' }}>
-                <select 
-                  onChange={() => setActivePage('catalog')}
-                  style={{
-                    appearance: 'none',
-                    width: '100%',
-                    padding: '16px 20px',
-                    borderRadius: '6px',
-                    border: '1px solid #d2dbe5',
-                    backgroundColor: '#ffffff',
-                    color: '#718096',
-                    fontSize: '0.95rem',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="">Select subject or resource</option>
-                  <option value="math">Mathematics</option>
-                  <option value="science">Science</option>
-                </select>
-                <div style={{ position: 'absolute', right: '40px', top: '18px', pointerEvents: 'none', color: '#718096' }}>
-                  <ChevronDown size={20} />
-                </div>
+              <div style={{ padding: '0 20px 24px 20px', position: 'relative' }}>
+                <CardDropdown
+                  placeholder="Select subject or resource"
+                  sections={[
+                    {
+                      header: "Leveled lessons",
+                      options: ["Elementary school", "Middle school", "High school", "College"]
+                    },
+                    {
+                      header: "Plans and worksheets",
+                      options: ["Lesson plans", "Math worksheets"]
+                    }
+                  ]}
+                  onSelect={handleDropdownSelect}
+                  openUpwards={false}
+                  isOpen={activeDropdownIdx === 4}
+                  onToggle={(open) => setActiveDropdownIdx(open ? 4 : null)}
+                />
               </div>
             </div>
 
@@ -608,29 +756,28 @@ export default function Home({
             <div className={`top-card ${activeTopTab === 5 ? 'active-tab-card' : ''}`} style={{
               backgroundColor: '#fcfbfa',
               borderRadius: '8px',
-              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
-              minHeight: '440px'
+              minHeight: '410px'
             }}>
               <div>
                 {/* Image */}
-                <div style={{ width: '100%', height: '220px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
                     src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=600" 
                     alt="AI mastery" 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
                 </div>
                 {/* Body */}
-                <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ padding: '24px 20px', textAlign: 'center' }}>
                   <h3 
                     style={{ 
-                      fontSize: '1.6rem', 
+                      fontSize: '1.35rem', 
                       color: '#000000', 
                       fontWeight: '800', 
-                      marginBottom: '16px',
+                      marginBottom: '12px',
                       cursor: 'pointer',
                       textDecoration: hoveredCard === 5 ? 'underline' : 'none',
                       display: 'inline-flex',
@@ -641,12 +788,12 @@ export default function Home({
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => setActivePage('catalog')}
                   >
-                    AI mastery <ChevronRight size={24} />
+                    AI mastery <ChevronRight size={16} />
                   </h3>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Practical AI skills for the modern workforce, with optional college credit available.
                   </p>
-                  <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '16px auto 0 auto', maxWidth: '300px' }}>
+                  <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '12px auto 0 auto', maxWidth: '280px' }}>
                     Gain the AI skills for the careers of tomorrow.
                   </p>
                 </div>
@@ -654,6 +801,54 @@ export default function Home({
             </div>
 
           </div>
+
+          {/* Desktop-only Search Section (Below Grid) */}
+          <div className="desktop-only" style={{ marginTop: '60px', marginBottom: '40px' }}>
+            <div style={{ 
+              width: '100%', 
+              textAlign: 'center',
+              background: 'linear-gradient(90deg, #f1f3e6 0%, #e2f5f7 100%)',
+              borderRadius: '12px',
+              padding: '80px 24px'
+            }}>
+              <h2 style={{ 
+                fontSize: '2.8rem', 
+                color: '#000000', 
+                fontFamily: "var(--font-heading), sans-serif", 
+                fontWeight: '900', 
+                marginBottom: '36px', 
+                letterSpacing: '-0.02em' 
+              }}>
+                What do you want to learn today?
+              </h2>
+              <form 
+                onSubmit={handleSearchSubmit}
+                style={{ position: 'relative', maxWidth: '640px', margin: '0 auto' }}
+              >
+                <div style={{ position: 'absolute', left: '24px', top: '22px', color: '#000000' }}>
+                  <Search size={24} strokeWidth={2.5} />
+                </div>
+                <input 
+                  type="text" 
+                  placeholder="Search Courses & Lessons" 
+                  value={localSearch}
+                  onChange={e => setLocalSearch(e.target.value)}
+                  style={{ 
+                    width: '100%', 
+                    padding: '22px 24px 22px 64px', 
+                    borderRadius: '8px', 
+                    border: '1.5px solid #d2dbe5', 
+                    fontSize: '1.15rem', 
+                    outline: 'none', 
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                    fontFamily: "var(--font-body)",
+                    color: '#222222'
+                  }} 
+                />
+              </form>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -851,7 +1046,7 @@ export default function Home({
             </div>
 
             {/* Right Image */}
-            <div style={{ flex: '1', position: 'relative' }}>
+            <div className="mobile-min-height-img" style={{ flex: '1', position: 'relative' }}>
               <img 
                 src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800" 
                 alt="Man studying on laptop" 
@@ -1586,25 +1781,53 @@ export default function Home({
             {/* Column 1 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {['ASWB Test Preparation & Resources', 'Business 106', 'Communications 101', 'English 104', 'HESI Admission Assessment (A2) Ex...', 'Introduction to Communications 101', 'Sociology 101'].map((link, i) => (
-                <a key={i} href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
+                <a key={i} href="#" onClick={(e) => {
+                  e.preventDefault();
+                  setSearchQuery(link);
+                  if (link.toLowerCase().includes('business')) onSelectCategoryLanding('subject-business');
+                  else if (link.toLowerCase().includes('english') || link.toLowerCase().includes('communications')) onSelectCategoryLanding('subject-english');
+                  else onSelectCategoryLanding('subject-humanities');
+                }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
               ))}
             </div>
             {/* Column 2 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {['Biology 101', 'Business 107', 'Computer Science 102', 'Free Online Courses and Education', 'History 103', 'Math 101', 'Statistics 101'].map((link, i) => (
-                <a key={i} href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
+                <a key={i} href="#" onClick={(e) => {
+                  e.preventDefault();
+                  setSearchQuery(link);
+                  if (link.toLowerCase().includes('biology')) onSelectCategoryLanding('subject-science');
+                  else if (link.toLowerCase().includes('business')) onSelectCategoryLanding('subject-business');
+                  else if (link.toLowerCase().includes('math') || link.toLowerCase().includes('statistics')) onSelectCategoryLanding('subject-math');
+                  else if (link.toLowerCase().includes('history')) onSelectCategoryLanding('subject-humanities');
+                  else setActivePage('catalog');
+                }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
               ))}
             </div>
             {/* Column 3 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {['Business 101', 'Chemistry', 'CSET English', 'GED Test Preparation & Resources', 'HSPT Practice Test', 'Math 108', 'TACHS Practice Test'].map((link, i) => (
-                <a key={i} href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
+                <a key={i} href="#" onClick={(e) => {
+                  e.preventDefault();
+                  setSearchQuery(link);
+                  if (link.toLowerCase().includes('business')) onSelectCategoryLanding('subject-business');
+                  else if (link.toLowerCase().includes('chemistry')) onSelectCategoryLanding('subject-science');
+                  else if (link.toLowerCase().includes('math')) onSelectCategoryLanding('subject-math');
+                  else if (link.toLowerCase().includes('english') || link.toLowerCase().includes('ged')) onSelectCategoryLanding('subject-english');
+                  else setActivePage('catalog');
+                }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
               ))}
             </div>
             {/* Column 4 */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {['Business 104', 'CLEP History of the United States', 'Economics 101', 'Grand Canyon University Transfer', 'Humanities 201', 'Political Science 102', 'Western Governors University Trans...'].map((link, i) => (
-                <a key={i} href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
+                <a key={i} href="#" onClick={(e) => {
+                  e.preventDefault();
+                  setSearchQuery(link);
+                  if (link.toLowerCase().includes('business') || link.toLowerCase().includes('economics')) onSelectCategoryLanding('subject-business');
+                  else if (link.toLowerCase().includes('history') || link.toLowerCase().includes('humanities') || link.toLowerCase().includes('political')) onSelectCategoryLanding('subject-humanities');
+                  else onSelectCategoryLanding('college-credit');
+                }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'none', lineHeight: '1.4' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a>
               ))}
             </div>
           </div>
@@ -1700,7 +1923,7 @@ export default function Home({
                   <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 0 20px 0' }}>
                     Keys to the Classroom is our initiative that helps combat the teacher shortage across the nation.
                   </p>
-                  <a href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
+                  <a href="#" onClick={(e) => { e.preventDefault(); setActivePage('ftce'); }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
                     Learn more
                   </a>
                 </div>
@@ -1746,7 +1969,7 @@ export default function Home({
                   <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 0 20px 0' }}>
                     A new way for working adults and underserved community members to earn a college degree.
                   </p>
-                  <a href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
+                  <a href="#" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('college-credit'); }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
                     Learn more
                   </a>
                 </div>
@@ -1782,7 +2005,7 @@ export default function Home({
                 <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 0 12px 0' }}>
                   We offer over 40 different academic awards and scholarships to help make education more accessible.
                 </p>
-                <a href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
+                <a href="#" onClick={(e) => { e.preventDefault(); onStartSignup(); }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
                   Learn more
                 </a>
               </div>
@@ -1809,7 +2032,7 @@ export default function Home({
                 <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.5', margin: '0 0 12px 0' }}>
                   We are a proud Pledge 1% partner. Pledge 1% partners are leading organizations committed to making giving back a priority.
                 </p>
-                <a href="#" style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
+                <a href="#" onClick={(e) => { e.preventDefault(); onStartSignup(); }} style={{ color: '#13809c', fontSize: '1rem', fontWeight: '600', textDecoration: 'underline' }}>
                   Learn more
                 </a>
               </div>
@@ -1887,105 +2110,6 @@ export default function Home({
           </div>
         </div>
       </section>
-
-      {/* 15. FOOTER */}
-      <footer style={{ backgroundColor: '#ffffff', padding: '60px 24px 40px 24px', borderTop: '1px solid #e2e8f0', width: '100%' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.5fr', gap: '32px', marginBottom: '60px' }}>
-            
-            {/* Column 1: Logo and About */}
-            <div style={{ paddingRight: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-                <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="18" fill="white" stroke="#d2dbe5" strokeWidth="2"/>
-                  <path d="M15 12L28 20L15 28V12Z" fill="#ffb627"/>
-                  <path d="M15 12L22 16L15 28V12Z" fill="#13809c"/>
-                </svg>
-              </div>
-              <p style={{ color: '#4a5568', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
-                Study.com is a leading online learning platform offering flexible and affordable learning products that help learners earn degrees, certifications, and credentials aligned with real-world outcomes.
-              </p>
-              {/* BBB Accredited Badge Placeholder */}
-              <div style={{ width: '140px', height: '50px', border: '1px solid #13809c', display: 'flex' }}>
-                <div style={{ width: '30%', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ color: '#13809c', fontWeight: 'bold', fontSize: '0.8rem' }}>BBB</span>
-                </div>
-                <div style={{ width: '70%', backgroundColor: '#13809c', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
-                  <span style={{ color: '#ffffff', fontSize: '0.6rem', fontWeight: 'bold', textAlign: 'center', lineHeight: '1.2' }}>ACCREDITED<br/>BUSINESS</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Column 2: Plans */}
-            <div>
-              <h4 style={{ color: '#000000', fontSize: '1.1rem', fontWeight: '800', marginBottom: '24px' }}>Plans</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Study Help', 'Test Preparation', 'College Credit', 'Teacher Resources', 'Working Scholars®'].map((link, i) => (
-                  <li key={i}><a href="#" style={{ color: '#13809c', fontSize: '0.9rem', fontWeight: '600', textDecoration: 'none' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a></li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 3: About us */}
-            <div>
-              <h4 style={{ color: '#000000', fontSize: '1.1rem', fontWeight: '800', marginBottom: '24px' }}>About us</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Blog', 'Careers', 'Teach for Us', 'Press Center', 'Ambassador', 'Scholarships'].map((link, i) => (
-                  <li key={i}><a href="#" style={{ color: '#13809c', fontSize: '0.9rem', fontWeight: '600', textDecoration: 'none' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a></li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 4: Support */}
-            <div>
-              <h4 style={{ color: '#000000', fontSize: '1.1rem', fontWeight: '800', marginBottom: '24px' }}>Support</h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['FAQ', 'Site Feedback', 'Terms of Use', 'Privacy Policy', 'DMCA Notice', 'ADA Compliance', 'Honor Code for Students', 'Resources and Guides'].map((link, i) => (
-                  <li key={i}><a href="#" style={{ color: '#13809c', fontSize: '0.9rem', fontWeight: '600', textDecoration: 'none' }} onMouseOver={(e) => e.target.style.textDecoration = 'underline'} onMouseOut={(e) => e.target.style.textDecoration = 'none'}>{link}</a></li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 5: Mobile Apps */}
-            <div>
-              <h4 style={{ color: '#000000', fontSize: '1.1rem', fontWeight: '800', marginBottom: '24px' }}>Mobile Apps</h4>
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <div style={{ width: '130px', height: '40px', backgroundColor: '#000000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ color: '#ffffff', fontSize: '0.7rem' }}>GET IT ON Google Play</span>
-                </div>
-                <div style={{ width: '130px', height: '40px', backgroundColor: '#000000', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ color: '#ffffff', fontSize: '0.7rem' }}>Download on the App Store</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Bottom Bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '32px' }}>
-            <div>
-              <p style={{ color: '#718096', fontSize: '0.8rem', margin: '0 0 8px 0' }}>
-                Contact us by phone at (877) 266-4919, or by mail at 100 View Street #202, Mountain View, CA 94041.
-              </p>
-              <p style={{ color: '#718096', fontSize: '0.8rem', margin: 0 }}>
-                © Copyright 2026 Study.com. All other trademarks and copyrights are the property of their respective owners. All rights reserved.
-              </p>
-            </div>
-            
-            {/* Social Icons */}
-            <div style={{ display: 'flex', gap: '16px' }}>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: 'bold' }}>f</div>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '10px' }}>▶</div>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px' }}>📷</div>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: 'bold' }}>X</div>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>in</div>
-            </div>
-          </div>
-
-        </div>
-      </footer>
-
     </div>
   );
 }

@@ -12,7 +12,8 @@ export default function FtceCourse({
   setActivePage, 
   setSearchQuery, 
   onSelectCourse, 
-  onSelectLesson 
+  onSelectLesson,
+  onStartSignup
 }) {
   // Search state
   const [homeSearchInput, setHomeSearchInput] = useState('');
@@ -313,8 +314,12 @@ export default function FtceCourse({
         }
       }
     }
+    handleLockLesson();
+  };
+
+  const handleLockLesson = () => {
     // For other chapters, show mock lessons click as signup prompt
-    setActivePage('signup');
+    onStartSignup();
   };
 
   // Quiz interactive triggers (Study Guide)
@@ -541,7 +546,7 @@ export default function FtceCourse({
               </p>
             </div>
             <button 
-              onClick={() => setActivePage('signup')}
+              onClick={() => onStartSignup()}
               style={{
                 backgroundColor: '#ffb627',
                 color: '#222222',
@@ -676,7 +681,7 @@ export default function FtceCourse({
                 </p>
               </div>
               <button 
-                onClick={() => setActivePage('signup')}
+                onClick={() => onStartSignup()}
                 style={{
                   backgroundColor: '#ffb627',
                   color: '#222222',
@@ -891,7 +896,7 @@ export default function FtceCourse({
 
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', width: '100%', justifyContent: 'center' }}>
                     <button 
-                      onClick={() => setActivePage('signup')}
+                      onClick={() => onStartSignup()}
                       style={{
                         backgroundColor: '#ffb627',
                         color: '#222222',
@@ -1010,7 +1015,7 @@ export default function FtceCourse({
             {/* Bottom Centered CTA and disclaimer */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
               <button
-                onClick={() => setActivePage('signup')}
+                onClick={() => onStartSignup()}
                 style={{
                   backgroundColor: '#ffb627',
                   color: '#222222',
@@ -1057,7 +1062,7 @@ export default function FtceCourse({
               Try it risk-free today! No obligation, cancel anytime.
             </p>
             <button 
-              onClick={() => setActivePage('signup')}
+              onClick={() => onStartSignup()}
               style={{
                 backgroundColor: '#ffb627',
                 color: '#222222',
@@ -1191,7 +1196,7 @@ export default function FtceCourse({
               </p>
             </div>
             <button 
-              onClick={() => setActivePage('signup')}
+              onClick={() => onStartSignup()}
               style={{
                 backgroundColor: '#ffb627',
                 color: '#222222',
@@ -1517,7 +1522,7 @@ export default function FtceCourse({
 
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <button
-                      onClick={() => setActivePage('signup')}
+                      onClick={() => onStartSignup()}
                       style={{
                         backgroundColor: '#ffb627',
                         color: '#222222',
@@ -1697,7 +1702,7 @@ export default function FtceCourse({
                 </div>
 
                 <button
-                  onClick={() => setActivePage('signup')}
+                  onClick={() => onStartSignup()}
                   style={{
                     alignSelf: 'flex-start',
                     backgroundColor: '#ffffff',
@@ -2020,7 +2025,7 @@ export default function FtceCourse({
             </div>
           </div>
           <button 
-            onClick={() => setActivePage('signup')}
+            onClick={() => onStartSignup()}
             style={{
               backgroundColor: '#ffb627',
               color: '#222222',
