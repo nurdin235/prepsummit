@@ -101,6 +101,7 @@ export default function Signup({ initialData, onComplete, onBack }) {
         return;
       }
       onComplete({
+        ...initialData,
         ...formData,
         role: initialData?.role || 'Student',
         goal: initialData?.goal || 'Prepare for an exam',
@@ -652,7 +653,7 @@ export default function Signup({ initialData, onComplete, onBack }) {
                 margin: 0,
                 zIndex: 1
               }}>
-                of students <strong style={{ color: '#e15b3e', fontWeight: '800' }}>passed their exam</strong> after using PrepSummit.com*
+                of students <strong style={{ color: '#e15b3e', fontWeight: '800' }}>passed their exam</strong> after using PrepSumit.com*
               </p>
             </div>
           </div>

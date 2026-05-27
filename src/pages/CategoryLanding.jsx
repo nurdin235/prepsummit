@@ -66,7 +66,7 @@ export default function CategoryLanding({ category, courses, onSelectCourse, onS
             "Seamless transcript delivery straight to your target university"
           ],
           testimonials: [
-            { quote: "PrepSummit allowed me to earn 15 credits in just two months and transfer them directly to my state university. I saved over $7,000!", author: "Sarah K., Business Student" },
+            { quote: "PrepSumit allowed me to earn 15 credits in just two months and transfer them directly to my state university. I saved over $7,000!", author: "Sarah K., Business Student" },
             { quote: "The videos are short, engaging, and directly aligned with the final exams. Transferring credits was incredibly straightforward.", author: "James L., Working Adult" }
           ]
         };
@@ -117,7 +117,7 @@ export default function CategoryLanding({ category, courses, onSelectCourse, onS
         const formattedSubj = subjName.charAt(0).toUpperCase() + subjName.slice(1);
         return {
           title: `Master ${formattedSubj} Courses & Concepts`,
-          subtitle: `Boost your grades, study for AP exams, or prep for college classes with PrepSummit.com-aligned visual guides and adaptive practice questions.`,
+          subtitle: `Boost your grades, study for AP exams, or prep for college classes with PrepSumit.com-aligned visual guides and adaptive practice questions.`,
           heroBg: "linear-gradient(135deg, #13809c 0%, #1f4e5a 100%)",
           accentColor: "#ffb627",
           stats: [
@@ -242,7 +242,7 @@ export default function CategoryLanding({ category, courses, onSelectCourse, onS
       <section style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '48px', alignItems: 'center' }} className="flex-col-mobile">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           <h2 style={{ fontSize: '2.2rem', color: '#1f4e5a', fontWeight: '900', fontFamily: 'var(--font-heading)' }}>
-            Why Students Excel on PrepSummit
+            Why Students Excel on PrepSumit
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {landingData.features.map((feature, i) => (
@@ -299,70 +299,75 @@ export default function CategoryLanding({ category, courses, onSelectCourse, onS
 
         {matchedCourses.length > 0 ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '24px' }}>
-            {matchedCourses.map(course => (
-              <div 
-                key={course.id}
-                className="card"
-                onClick={() => onSelectCourse(course)}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: 0,
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  border: '1.5px solid #d2dbe5',
-                  transition: 'transform 0.15s'
-                }}
-                onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'none'}
-              >
-                {/* Course Banner Image */}
-                <div style={{ height: '180px', width: '100%', position: 'relative' }}>
-                  <img 
-                    src={course.image} 
-                    alt={course.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                  <div style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%)'
-                  }}></div>
-                  <span style={{
-                    position: 'absolute', bottom: '12px', left: '16px',
-                    backgroundColor: 'var(--accent)', color: '#222222',
-                    fontSize: '0.75rem', fontWeight: '800', padding: '3px 8px', borderRadius: '20px'
-                  }}>
-                    {course.subject}
-                  </span>
-                </div>
-
-                {/* Body Content */}
-                <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                  <h3 style={{ fontSize: '1.25rem', color: 'var(--primary-dark)', fontWeight: '800', margin: 0, lineHeight: '1.3' }}>
-                    {course.title}
-                  </h3>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                    {course.description.substring(0, 140)}...
-                  </p>
-                  
-                  {/* Footer Meta Row */}
-                  <div style={{ 
-                    marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #f0f4f8',
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
-                  }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', fontWeight: '700' }}>
-                      {course.lessonsCount} lessons • {course.duration}
-                    </span>
-                    <span style={{ 
-                      fontSize: '0.85rem', color: 'var(--primary)', fontWeight: '700',
-                      display: 'flex', alignItems: 'center', gap: '2px'
+            {matchedCourses.map(course => {
+              const courseHref = course.id === 'ftce-professional-education-test' ? '/ftce' : (course.id === 'teas-prep' ? '/teas' : `/courses/${course.id}`);
+              return (
+                <a 
+                  key={course.id}
+                  href={courseHref}
+                  className="card"
+                  onClick={(e) => { e.preventDefault(); onSelectCourse(course); }}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: 0,
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    border: '1.5px solid #d2dbe5',
+                    transition: 'transform 0.15s',
+                    textDecoration: 'none'
+                  }}
+                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                  onMouseOut={e => e.currentTarget.style.transform = 'none'}
+                >
+                  {/* Course Banner Image */}
+                  <div style={{ height: '180px', width: '100%', position: 'relative' }}>
+                    <img 
+                      src={course.image} 
+                      alt={course.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%)'
+                    }}></div>
+                    <span style={{
+                      position: 'absolute', bottom: '12px', left: '16px',
+                      backgroundColor: 'var(--accent)', color: '#222222',
+                      fontSize: '0.75rem', fontWeight: '800', padding: '3px 8px', borderRadius: '20px'
                     }}>
-                      Study Course <ChevronRight size={14} />
+                      {course.subject}
                     </span>
                   </div>
-                </div>
-              </div>
-            ))}
+
+                  {/* Body Content */}
+                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.25rem', color: 'var(--primary-dark)', fontWeight: '800', margin: 0, lineHeight: '1.3' }}>
+                      {course.title}
+                    </h3>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
+                      {course.description.substring(0, 140)}...
+                    </p>
+                    
+                    {/* Footer Meta Row */}
+                    <div style={{ 
+                      marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid #f0f4f8',
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
+                    }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', fontWeight: '700' }}>
+                        {course.lessonsCount} lessons • {course.duration}
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.85rem', color: 'var(--primary)', fontWeight: '700',
+                        display: 'flex', alignItems: 'center', gap: '2px'
+                      }}>
+                        Study Course <ChevronRight size={14} />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         ) : (
           <div className="card" style={{ padding: '48px', textAlign: 'center' }}>

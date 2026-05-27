@@ -100,7 +100,7 @@ export default function TeasLanding({
                 <path d="M50 50 L85 50 L15 85 Z" fill="#ffb627" />
               </svg>
               <span style={{ fontSize: '1.45rem', fontWeight: '800', color: '#1f4e5a', letterSpacing: '-0.03em' }}>
-                PrepSummit<span style={{ color: '#ffb627' }}>.com</span>
+                PrepSumit<span style={{ color: '#ffb627' }}>.com</span>
                 <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#007791', marginLeft: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Nursing</span>
               </span>
             </div>
@@ -108,7 +108,7 @@ export default function TeasLanding({
             {/* Links */}
             <nav className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <span 
-                onClick={onStartSignup}
+                onClick={() => setActivePage('plans')}
                 style={{ fontSize: '0.92rem', fontWeight: '700', color: '#222222', cursor: 'pointer' }}
               >
                 Plans
@@ -253,7 +253,7 @@ export default function TeasLanding({
             backgroundColor: '#ffffff', borderTop: '1px solid #d2dbe5', padding: '16px 24px',
             display: 'flex', flexDirection: 'column', gap: '14px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
           }}>
-            <span onClick={() => { onStartSignup(); setMobileMenuOpen(false); }} style={{ fontWeight: '700', color: '#222222', cursor: 'pointer' }}>Plans</span>
+            <span onClick={() => { setActivePage('plans'); setMobileMenuOpen(false); }} style={{ fontWeight: '700', color: '#222222', cursor: 'pointer' }}>Plans</span>
             <span onClick={() => { handleStudyGuideClick('TEAS'); setMobileMenuOpen(false); }} style={{ fontWeight: '700', color: '#222222', cursor: 'pointer' }}>TEAS Exams</span>
             <span onClick={() => { onStartSignup(); setMobileMenuOpen(false); }} style={{ fontWeight: '700', color: '#222222', cursor: 'pointer' }}>TEAS Practice Test</span>
             <span onClick={() => { setActivePage('login'); setMobileMenuOpen(false); }} style={{ fontWeight: '700', color: '#13809c', cursor: 'pointer' }}>Log In</span>
@@ -426,7 +426,7 @@ export default function TeasLanding({
                 >
                   <div style={{ height: '170px', width: '100%', overflow: 'hidden' }}>
                     <img 
-                      src="https://images.unsplash.com/photo-1582750433449-64c656fd170a?w=500&auto=format&fit=crop&q=80" 
+                      src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=80" 
                       alt="Doctors discussing medical chart" 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
@@ -453,10 +453,10 @@ export default function TeasLanding({
                 >
                   <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'center' }}>
                     <h4 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#111111', margin: 0, lineHeight: '1.2' }}>
-                      PrepSummit.com TEAS Scholarship
+                      PrepSumit.com TEAS Scholarship
                     </h4>
                     <p style={{ fontSize: '0.88rem', color: '#4a5568', margin: 0, lineHeight: '1.5' }}>
-                      Take advantage of PrepSummit.com's TEAS exam scholarship. Apply today for a chance to win.
+                      Take advantage of PrepSumit.com's TEAS exam scholarship. Apply today for a chance to win.
                     </p>
                   </div>
                   <div style={{ height: '100%', width: '100%', overflow: 'hidden' }}>
@@ -538,7 +538,7 @@ export default function TeasLanding({
             >
               <div style={{ width: '90px', height: '60px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                 <img 
-                  src="https://images.unsplash.com/photo-1582750433449-64c656fd170a?w=150&auto=format&fit=crop&q=80" 
+                  src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=150&auto=format&fit=crop&q=80" 
                   alt="TEAS course" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
@@ -721,7 +721,7 @@ export default function TeasLanding({
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center' }}>
           
           <h4 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#222222', margin: 0, textTransform: 'none' }}>
-            PrepSummit.com has been featured on:
+            PrepSumit.com has been featured on:
           </h4>
 
           {/* Logos grid */}

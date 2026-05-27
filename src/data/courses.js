@@ -14,7 +14,7 @@ export const coursesData = [
     videos: 92,
     hoursOfVideo: 9,
     image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=500&auto=format&fit=crop&q=60",
-    description: "PrepSummit.com's FTCE Professional Education Test (083) study guide helps you prepare for this important Florida teacher certification exam with confidence. This comprehensive prep course features engaging video lessons, quick self-check quizzes, and realistic full-length practice tests designed to strengthen your teaching knowledge and test-taking skills.",
+    description: "PrepSumit.com's FTCE Professional Education Test (083) study guide helps you prepare for this important Florida teacher certification exam with confidence. This comprehensive prep course features engaging video lessons, quick self-check quizzes, and realistic full-length practice tests designed to strengthen your teaching knowledge and test-taking skills.",
     lessons: [
       {
         id: "ftce-passing-score",
@@ -194,7 +194,7 @@ export const coursesData = [
     practiceTests: 3,
     videos: 32,
     hoursOfVideo: 4.5,
-    image: "https://images.unsplash.com/photo-1532187863486-abf9d39d66e8?w=500&auto=format&fit=crop&q=60",
+    image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&auto=format&fit=crop&q=60",
     description: "Explore the structural and functional units of life. Learn organelle functions, cell division, membrane transport, and bioenergetics.",
     lessons: [
       {
@@ -701,10 +701,10 @@ export const coursesData = [
         quiz: [
           {
             id: "ws-q1",
-            question: "Which bodies recommend PrepSummit course credits for transfer?",
+            question: "Which bodies recommend PrepSumit course credits for transfer?",
             options: ["Pearson and Pearson VUE", "ACE (American Council on Education) and NCCRS", "The Department of State", "Local High Schools"],
             answer: 1,
-            explanation: "Both ACE and NCCRS evaluate and recommend PrepSummit courses for college credit transfers to over 1,500 institutions."
+            explanation: "Both ACE and NCCRS evaluate and recommend PrepSumit courses for college credit transfers to over 1,500 institutions."
           }
         ]
       }
@@ -727,8 +727,8 @@ export const coursesData = [
     practiceTests: 5,
     videos: 36,
     hoursOfVideo: 4,
-    image: "https://images.unsplash.com/photo-1582750433449-64c656fd170a?w=500&auto=format&fit=crop&q=60",
-    description: "PrepSummit.com's TEAS study guide is designed to fully prepare you for the Test of Essential Academic Skills. Master the Math, Science, English, and Reading sections with our micro-video lessons, flashcards, and standard-aligned practice quizzes.",
+    image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=60",
+    description: "PrepSumit.com's TEAS study guide is designed to fully prepare you for the Test of Essential Academic Skills. Master the Math, Science, English, and Reading sections with our micro-video lessons, flashcards, and standard-aligned practice quizzes.",
     lessons: [
       {
         id: "teas-what-is-exam",

@@ -6,7 +6,7 @@ export default function AITutor({ course, lesson }) {
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: "Hello! I'm your PrepSummit AI Tutor. Ask me any questions about your lessons, study objectives, or exams, and I'll help you master them!",
+      text: "Hello! I'm your PrepSumit AI Tutor. Ask me any questions about your lessons, study objectives, or exams, and I'll help you master them!",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -21,7 +21,7 @@ export default function AITutor({ course, lesson }) {
 
   // Adjust greeting based on current context
   useEffect(() => {
-    let text = "Hello! I'm your PrepSummit AI Tutor. Ask me any questions about your lessons, study objectives, or exams, and I'll help you master them!";
+    let text = "Hello! I'm your PrepSumit AI Tutor. Ask me any questions about your lessons, study objectives, or exams, and I'll help you master them!";
     if (lesson) {
       text = `Welcome to the lesson: "${lesson.title}"! I am ready to explain formulas, quiz you on this topic, or clarify any concepts. What would you like to explore first?`;
     } else if (course) {
@@ -97,9 +97,9 @@ export default function AITutor({ course, lesson }) {
       } else if (q === '1' || q === '3' || q.includes('nucleus') || q.includes('lysosome')) {
         aiText = "Not quite! The correct answer is 2 (Ribosome). The nucleus houses DNA, and lysosomes break down wastes. Would you like another question?";
       } else if (q.includes('credit') || q.includes('transfer')) {
-        aiText = "PrepSummit courses carry ACE and NCCRS recommendations. You can transfer credits earned here to over 1,500 partner colleges. Simply pass the proctored exam and request a transcript from your dashboard!";
+        aiText = "PrepSumit courses carry ACE and NCCRS recommendations. You can transfer credits earned here to over 1,500 partner colleges. Simply pass the proctored exam and request a transcript from your dashboard!";
       } else if (q.includes('study strategies') || q.includes('strategy')) {
-        aiText = "To study effectively on PrepSummit: 1. Watch the short video lesson, 2. Review the transcript, 3. Study the flashcard decks, and 4. Complete the practice quiz. Users who do this have a 92% pass rate!";
+        aiText = "To study effectively on PrepSumit: 1. Watch the short video lesson, 2. Review the transcript, 3. Study the flashcard decks, and 4. Complete the practice quiz. Users who do this have a 92% pass rate!";
       }
 
       const aiMsg = {
@@ -118,7 +118,7 @@ export default function AITutor({ course, lesson }) {
       <div 
         className="chatbot-bubble" 
         onClick={() => setIsOpen(!isOpen)}
-        title="Open PrepSummit AI Study Tutor"
+        title="Open PrepSumit AI Study Tutor"
       >
         {isOpen ? <X size={26} /> : <Sparkles size={26} />}
       </div>
@@ -150,7 +150,7 @@ export default function AITutor({ course, lesson }) {
                 <Sparkles size={16} fill="var(--accent)" />
               </div>
               <div>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: '800', margin: 0 }}>PrepSummit AI Tutor</h4>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: '800', margin: 0 }}>PrepSumit AI Tutor</h4>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10b981' }}></span>
                   <span style={{ fontSize: '0.72rem', opacity: 0.8, fontWeight: '700' }}>Online Assistant</span>

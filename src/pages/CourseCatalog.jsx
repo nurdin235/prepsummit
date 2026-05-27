@@ -161,110 +161,119 @@ export default function CourseCatalog({ courses, searchQuery, setSearchQuery, on
           {/* Cards Grid list (Screenshot 480 style) */}
           {filteredCourses.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {filteredCourses.map((course) => (
-                <div 
-                  key={course.id}
-                  className="card catalog-course-card-grid"
-                  style={{
-                    padding: '24px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #d2dbe5',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 15px rgba(31,78,90,0.02)',
-                    transition: 'transform 0.2s',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => onSelectCourse(course)}
-                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-                  onMouseOut={e => e.currentTarget.style.transform = 'none'}
-                >
-                  
-                  {/* Left block: Course visual top image */}
-                  <div style={{
-                    width: '100%',
-                    height: '140px',
-                    borderRadius: '4px',
-                    overflow: 'hidden',
-                    backgroundColor: '#f2f6f9',
-                    position: 'relative'
-                  }}>
-                    <img 
-                      src={course.image || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&auto=format&fit=crop&q=80"}
-                      alt={course.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                    <span style={{ 
-                      position: 'absolute', 
-                      bottom: '8px', 
-                      left: '8px', 
-                      backgroundColor: 'rgba(31,78,90,0.9)', 
-                      color: 'white', 
-                      fontSize: '0.72rem', 
-                      fontWeight: '800', 
-                      padding: '3px 8px', 
-                      borderRadius: '20px' 
+              {filteredCourses.map((course) => {
+                const courseHref = course.id === 'ftce-professional-education-test' ? '/ftce' : (course.id === 'teas-prep' ? '/teas' : `/courses/${course.id}`);
+                return (
+                  <a 
+                    key={course.id}
+                    href={courseHref}
+                    className="card catalog-course-card-grid"
+                    style={{
+                      padding: '24px',
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #d2dbe5',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 15px rgba(31,78,90,0.02)',
+                      transition: 'transform 0.2s',
+                      cursor: 'pointer',
+                      textDecoration: 'none',
+                      display: 'grid'
+                    }}
+                    onClick={(e) => { e.preventDefault(); onSelectCourse(course); }}
+                    onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                    onMouseOut={e => e.currentTarget.style.transform = 'none'}
+                  >
+                    
+                    {/* Left block: Course visual top image */}
+                    <div style={{
+                      width: '100%',
+                      height: '140px',
+                      borderRadius: '4px',
+                      overflow: 'hidden',
+                      backgroundColor: '#f2f6f9',
+                      position: 'relative'
                     }}>
-                      {course.subject}
-                    </span>
-                  </div>
-
-                  {/* Right block: Course summary and View Lessons Button */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{ fontSize: '1.28rem', color: '#1f4e5a', margin: 0, fontWeight: '800', lineHeight: '1.3' }}>
-                        {course.title}
-                      </h3>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#ffb627', flexShrink: 0 }}>
-                        <Star size={16} fill="#ffb627" stroke="#ffb627" />
-                        <span style={{ color: '#222222', fontSize: '0.85rem', fontWeight: '800' }}>{course.rating}</span>
-                      </div>
+                      <img 
+                        src={course.image || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&auto=format&fit=crop&q=80"}
+                        alt={course.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      <span style={{ 
+                        position: 'absolute', 
+                        bottom: '8px', 
+                        left: '8px', 
+                        backgroundColor: 'rgba(31,78,90,0.9)', 
+                        color: 'white', 
+                        fontSize: '0.72rem', 
+                        fontWeight: '800', 
+                        padding: '3px 8px', 
+                        borderRadius: '20px' 
+                      }}>
+                        {course.subject}
+                      </span>
                     </div>
 
-                    <p style={{ fontSize: '0.88rem', color: '#4a5568', lineHeight: '1.5', margin: 0 }}>
-                      {course.description}
-                    </p>
-
-                    {/* Meta stats bar and View Lessons teal button */}
-                    <div style={{ 
-                      marginTop: 'auto', 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      alignItems: 'center',
-                      paddingTop: '12px',
-                      borderTop: '1px solid #f2f6f9'
-                    }}>
-                      <div style={{ display: 'flex', gap: '16px', fontSize: '0.82rem', color: '#718096', fontWeight: '700' }}>
-                        <span>{course.lessonsCount} lessons</span>
-                        <span>•</span>
-                        <span>{course.duration}</span>
+                    {/* Right block: Course summary and View Lessons Button */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <h3 style={{ fontSize: '1.28rem', color: '#1f4e5a', margin: 0, fontWeight: '800', lineHeight: '1.3' }}>
+                          {course.title}
+                        </h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#ffb627', flexShrink: 0 }}>
+                          <Star size={16} fill="#ffb627" stroke="#ffb627" />
+                          <span style={{ color: '#222222', fontSize: '0.85rem', fontWeight: '800' }}>{course.rating}</span>
+                        </div>
                       </div>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectCourse(course);
-                        }}
-                        style={{
-                          backgroundColor: '#13809c',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '4px',
-                          fontWeight: '800',
-                          fontSize: '0.88rem',
-                          padding: '10px 18px',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.2s'
-                        }}
-                        onMouseOver={e => e.target.style.backgroundColor = '#0f6880'}
-                        onMouseOut={e => e.target.style.backgroundColor = '#13809c'}
-                      >
-                        View Lessons ({course.lessonsCount})
-                      </button>
+
+                      <p style={{ fontSize: '0.88rem', color: '#4a5568', lineHeight: '1.5', margin: 0 }}>
+                        {course.description}
+                      </p>
+
+                      {/* Meta stats bar and View Lessons teal button */}
+                      <div style={{ 
+                        marginTop: 'auto', 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        paddingTop: '12px',
+                        borderTop: '1px solid #f2f6f9'
+                      }}>
+                        <div style={{ display: 'flex', gap: '16px', fontSize: '0.82rem', color: '#718096', fontWeight: '700' }}>
+                          <span>{course.lessonsCount} lessons</span>
+                          <span>•</span>
+                          <span>{course.duration}</span>
+                        </div>
+                        <a 
+                          href={courseHref}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            onSelectCourse(course);
+                          }}
+                          style={{
+                            backgroundColor: '#13809c',
+                            color: '#ffffff',
+                            border: 'none',
+                            borderRadius: '4px',
+                            fontWeight: '800',
+                            fontSize: '0.88rem',
+                            padding: '10px 18px',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.2s',
+                            textDecoration: 'none',
+                            display: 'inline-block'
+                          }}
+                          onMouseOver={e => e.target.style.backgroundColor = '#0f6880'}
+                          onMouseOut={e => e.target.style.backgroundColor = '#13809c'}
+                        >
+                          View Lessons ({course.lessonsCount})
+                        </a>
+                      </div>
+
                     </div>
-
-                  </div>
-
-                </div>
-              ))}
+                  </a>
+                );
+              })}
             </div>
           ) : (
             <div className="card" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-tertiary)' }}>

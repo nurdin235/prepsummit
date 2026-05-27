@@ -1,7 +1,26 @@
 import { useState } from 'react';
 
-export default function Checkout({ signupData, onCheckoutComplete, selectedCourse, onBack }) {
-  const [selectedPlan, setSelectedPlan] = useState('monthly'); // 'monthly' vs 'twoweek'
+export default function Checkout({ signupData, onCheckoutComplete, selectedCourse, onBack, setActivePage }) {
+  const plansInfo = {
+    accelerator: { name: "College Accelerator", price: "$235.00/mo", desc: "Earn real college credit accepted by 1,500+ colleges" },
+    testprep: { name: "Test Prep Plan", price: "$59.99/mo", desc: signupData?.selectedTest ? `Full test coverage for ${signupData.selectedTest}` : "Full test coverage & 88,000+ video lessons" },
+    premium: { name: "Premium Edition Plan", price: "$59.99/mo", desc: "Videos, study tools, and 24/7 expert homework help" },
+    teacher: { name: "Classroom Teacher Edition", price: "$29.99/mo", desc: "Lesson plans, classroom tools, and automatic grading" },
+    monthly: { name: "Monthly access", price: "$59.99/mo", desc: "Just $2.00/day (+ tax if applicable)" },
+    twoweek: { name: "Two week access", price: "$39.99", desc: "One-time payment, no recurring charge" }
+  };
+
+  const [selectedPlan, setSelectedPlan] = useState(() => {
+    if (signupData?.planName) {
+      const name = signupData.planName.toLowerCase();
+      if (name.includes('accelerator')) return 'accelerator';
+      if (name.includes('test prep')) return 'testprep';
+      if (name.includes('premium')) return 'premium';
+      if (name.includes('teacher')) return 'teacher';
+    }
+    return 'monthly';
+  });
+
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' vs 'paypal'
   const [couponCode, setCouponCode] = useState('');
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -27,7 +46,8 @@ export default function Checkout({ signupData, onCheckoutComplete, selectedCours
         return;
       }
     }
-    const planText = selectedPlan === 'monthly' ? '$59.99/mo Monthly Plan' : '$39.99 Two-Week Pass';
+    const activePlanInfo = plansInfo[selectedPlan] || plansInfo['monthly'];
+    const planText = `${activePlanInfo.price} ${activePlanInfo.name}`;
     onCheckoutComplete(planText);
   };
 
@@ -399,7 +419,7 @@ export default function Checkout({ signupData, onCheckoutComplete, selectedCours
                 lineHeight: '1.5',
                 margin: '8px 0 0 0'
               }}>
-                By creating an account, you agree to PrepSummit.com's <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Terms of Use</a> and <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Privacy Policy</a>.
+                By creating an account, you agree to PrepSumit.com's <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Terms of Use</a> and <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Privacy Policy</a>.
               </p>
 
               {/* Submit Button */}
@@ -551,79 +571,131 @@ export default function Checkout({ signupData, onCheckoutComplete, selectedCours
             {/* Radio inputs for pricing */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               
-              {/* Option 1: Monthly */}
-              <label style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '10px',
-                cursor: 'pointer',
-                padding: '12px',
-                border: '1.5px solid #ccd6e0',
-                borderRadius: '4px',
-                backgroundColor: selectedPlan === 'monthly' ? '#eef6f8' : 'transparent',
-                borderColor: selectedPlan === 'monthly' ? '#00829a' : '#ccd6e0',
-                transition: 'all 0.15s'
-              }}>
-                <input 
-                  type="radio"
-                  name="studyPlan"
-                  checked={selectedPlan === 'monthly'}
-                  onChange={() => setSelectedPlan('monthly')}
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    accentColor: '#00829a',
-                    marginTop: '3px',
-                    cursor: 'pointer'
-                  }}
-                />
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Monthly access</span>
-                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$59.99<span style={{ fontSize: '0.75rem', fontWeight: '500', color: '#718096' }}>/mo</span></span>
-                  </div>
-                  <div style={{ fontSize: '0.78rem', color: '#718096', fontStyle: 'italic', marginTop: '2px' }}>
-                    Just $2.00/day (+ tax if applicable)
-                  </div>
-                </div>
-              </label>
+              {/* Render chosen plan if it is a custom plan */}
+              {['accelerator', 'testprep', 'premium', 'teacher'].includes(selectedPlan) ? (
+                <>
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    cursor: 'pointer',
+                    padding: '12px',
+                    border: '1.5px solid #00829a',
+                    borderRadius: '4px',
+                    backgroundColor: '#eef6f8',
+                    transition: 'all 0.15s'
+                  }}>
+                    <input 
+                      type="radio"
+                      name="studyPlan"
+                      checked={true}
+                      readOnly
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        accentColor: '#00829a',
+                        marginTop: '3px',
+                        cursor: 'pointer'
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>{plansInfo[selectedPlan].name}</span>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>{plansInfo[selectedPlan].price}</span>
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#718096', fontStyle: 'italic', marginTop: '2px' }}>
+                        {plansInfo[selectedPlan].desc}
+                      </div>
+                    </div>
+                  </label>
 
-              {/* Option 2: 2-Week access */}
-              <label style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '10px',
-                cursor: 'pointer',
-                padding: '12px',
-                border: '1.5px solid #ccd6e0',
-                borderRadius: '4px',
-                backgroundColor: selectedPlan === 'twoweek' ? '#eef6f8' : 'transparent',
-                borderColor: selectedPlan === 'twoweek' ? '#00829a' : '#ccd6e0',
-                transition: 'all 0.15s'
-              }}>
-                <input 
-                  type="radio"
-                  name="studyPlan"
-                  checked={selectedPlan === 'twoweek'}
-                  onChange={() => setSelectedPlan('twoweek')}
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    accentColor: '#00829a',
-                    marginTop: '3px',
-                    cursor: 'pointer'
-                  }}
-                />
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Two week access</span>
-                    <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$39.99</span>
+                  <div style={{ textAlign: 'right', marginTop: '2px' }}>
+                    <a 
+                      href="/academy/plans.html" 
+                      onClick={(e) => { e.preventDefault(); setActivePage('plans'); }}
+                      style={{ fontSize: '0.82rem', color: '#00829a', fontWeight: '700', textDecoration: 'underline', cursor: 'pointer' }}
+                    >
+                      Change plan
+                    </a>
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: '#718096', marginTop: '2px' }}>
-                    Renews on {getRenewalDateStr()} for $59.99/mo
-                  </div>
-                </div>
-              </label>
+                </>
+              ) : (
+                <>
+                  {/* Option 1: Monthly */}
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    cursor: 'pointer',
+                    padding: '12px',
+                    border: '1.5px solid #ccd6e0',
+                    borderRadius: '4px',
+                    backgroundColor: selectedPlan === 'monthly' ? '#eef6f8' : 'transparent',
+                    borderColor: selectedPlan === 'monthly' ? '#00829a' : '#ccd6e0',
+                    transition: 'all 0.15s'
+                  }}>
+                    <input 
+                      type="radio"
+                      name="studyPlan"
+                      checked={selectedPlan === 'monthly'}
+                      onChange={() => setSelectedPlan('monthly')}
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        accentColor: '#00829a',
+                        marginTop: '3px',
+                        cursor: 'pointer'
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Monthly access</span>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$59.99<span style={{ fontSize: '0.75rem', fontWeight: '500', color: '#718096' }}>/mo</span></span>
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#718096', fontStyle: 'italic', marginTop: '2px' }}>
+                        Just $2.00/day (+ tax if applicable)
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Option 2: 2-Week access */}
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    cursor: 'pointer',
+                    padding: '12px',
+                    border: '1.5px solid #ccd6e0',
+                    borderRadius: '4px',
+                    backgroundColor: selectedPlan === 'twoweek' ? '#eef6f8' : 'transparent',
+                    borderColor: selectedPlan === 'twoweek' ? '#00829a' : '#ccd6e0',
+                    transition: 'all 0.15s'
+                  }}>
+                    <input 
+                      type="radio"
+                      name="studyPlan"
+                      checked={selectedPlan === 'twoweek'}
+                      onChange={() => setSelectedPlan('twoweek')}
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        accentColor: '#00829a',
+                        marginTop: '3px',
+                        cursor: 'pointer'
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>Two week access</span>
+                        <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#2d3748' }}>$39.99</span>
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#718096', marginTop: '2px' }}>
+                        Renews on {getRenewalDateStr()} for $59.99/mo
+                      </div>
+                    </div>
+                  </label>
+                </>
+              )}
 
             </div>
 
@@ -662,7 +734,7 @@ export default function Checkout({ signupData, onCheckoutComplete, selectedCours
                 color: '#4a5568',
                 margin: 0
               }}>
-                of students <strong style={{ color: '#e15b3e', fontWeight: '700' }}>passed their exam</strong> after using PrepSummit.com*
+                of students <strong style={{ color: '#e15b3e', fontWeight: '700' }}>passed their exam</strong> after using PrepSumit.com*
               </p>
             </div>
           </div>

@@ -253,7 +253,7 @@ export default function FtceCourse({
     },
     {
       question: "How to prepare for the FTCE 083?",
-      answer: "The FTCE Professional Education practice test on PrepSummit.com is a popular choice among online learners. Our practice tests help learners by simulating the experience of taking the real test so that they can be fully prepared when the day arrives."
+      answer: "The FTCE Professional Education practice test on PrepSumit.com is a popular choice among online learners. Our practice tests help learners by simulating the experience of taking the real test so that they can be fully prepared when the day arrives."
     },
     {
       question: "If I don't pass, can I retake the test?",
@@ -401,9 +401,9 @@ export default function FtceCourse({
             {/* Hero details */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ fontSize: '0.85rem', opacity: 0.9, display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                <span onClick={() => { setActivePage('home'); setSearchQuery(''); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Test Prep Courses</span>
+                <a href="/" onClick={(e) => { e.preventDefault(); setActivePage('home'); setSearchQuery(''); }} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'inherit' }}>Test Prep Courses</a>
                 <ChevronRight size={10} />
-                <span onClick={() => setActiveTab('Overview')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>FTCE Professional Education (PEd) (083) Study Guide and Exam Prep</span>
+                <a href="/ftce" onClick={(e) => { e.preventDefault(); setActiveTab('Overview'); }} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'inherit' }}>FTCE Professional Education (PEd) (083) Study Guide and Exam Prep</a>
               </div>
               
               <h1 style={{ fontSize: '2.5rem', fontWeight: '800', lineHeight: '1.2', color: '#ffffff', margin: 0 }}>
@@ -441,7 +441,7 @@ export default function FtceCourse({
               </button>
             </div>
 
-            {/* Illustrated vector desk scene SVG (Premium PrepSummit.com look representation) */}
+            {/* Illustrated vector desk scene SVG (Premium PrepSumit.com look representation) */}
             <div style={{ display: 'flex', justifyContent: 'center' }} className="desktop-only">
               <svg width="340" height="260" viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                 {/* Circle Background */}
@@ -598,7 +598,7 @@ export default function FtceCourse({
                 Benefits of the FTCE 083 Practice Test
               </h3>
               <p style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
-                Add our FTCE Professional Education practice test to your study routine to experience its numerous benefits. Practice tests on PrepSummit.com prepare learners by offering explanations for every test answer and going over the most important concepts to know. Perks like these make the FTCE 083 practice test an ideal tool for future professional educators in Florida. Candidates also gain access to many insights into the test content when they complete this test. Submit the free practice exam to view your passing status, strengths, weaknesses, and more. On PrepSummit.com, learners and educators are given equal opportunity to excel. Visit PrepSummit.com today to view millions of expert-created learning materials.
+                Add our FTCE Professional Education practice test to your study routine to experience its numerous benefits. Practice tests on PrepSumit.com prepare learners by offering explanations for every test answer and going over the most important concepts to know. Perks like these make the FTCE 083 practice test an ideal tool for future professional educators in Florida. Candidates also gain access to many insights into the test content when they complete this test. Submit the free practice exam to view your passing status, strengths, weaknesses, and more. On PrepSumit.com, learners and educators are given equal opportunity to excel. Visit PrepSumit.com today to view millions of expert-created learning materials.
               </p>
             </div>
 
@@ -607,7 +607,7 @@ export default function FtceCourse({
                 How to Use the FTCE 083 Practice Test Effectively
               </h3>
               <p style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
-                The FTCE 083 practice test on PrepSummit.com is a popular choice among online learners. Take this practice test to experience how taking the real test feels so that you can be fully prepared when the day arrives. Complete this test to see the results and how you stand regarding the actual test. Upon completing the FTCE 082 practice test, learn whether you passed or failed, and check out your completion time, accuracy of responses, and other informative stats. Learn from your mistakes, retake the practice test as many times as needed, and improve your score efficiently.
+                The FTCE 083 practice test on PrepSumit.com is a popular choice among online learners. Take this practice test to experience how taking the real test feels so that you can be fully prepared when the day arrives. Complete this test to see the results and how you stand regarding the actual test. Upon completing the FTCE 082 practice test, learn whether you passed or failed, and check out your completion time, accuracy of responses, and other informative stats. Learn from your mistakes, retake the practice test as many times as needed, and improve your score efficiently.
               </p>
             </div>
 
@@ -960,7 +960,7 @@ export default function FtceCourse({
                   92%
                 </div>
                 <span style={{ fontSize: '0.92rem', color: 'var(--text-primary)', fontWeight: '600', maxWidth: '240px', lineHeight: '1.4' }}>
-                  passed their exam after using PrepSummit.com
+                  passed their exam after using PrepSumit.com
                 </span>
               </div>
 
@@ -974,7 +974,7 @@ export default function FtceCourse({
                   96%
                 </div>
                 <span style={{ fontSize: '0.92rem', color: 'var(--text-primary)', fontWeight: '600', maxWidth: '240px', lineHeight: '1.4' }}>
-                  found PrepSummit.com a valuable test prep resource
+                  found PrepSumit.com a valuable test prep resource
                 </span>
               </div>
 
@@ -988,7 +988,7 @@ export default function FtceCourse({
                   94%
                 </div>
                 <span style={{ fontSize: '0.92rem', color: 'var(--text-primary)', fontWeight: '600', maxWidth: '240px', lineHeight: '1.4' }}>
-                  were more confident after using PrepSummit.com
+                  were more confident after using PrepSumit.com
                 </span>
               </div>
 
@@ -998,7 +998,7 @@ export default function FtceCourse({
           {/* Section 6: Press logo bar */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', padding: '16px 0' }}>
             <span style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-primary)' }}>
-              PrepSummit.com has been featured on
+              PrepSumit.com has been featured on
             </span>
             <div className="featured-logos-grid" style={{ opacity: 0.6 }}>
               {/* Logo Replicas using neat typography */}
@@ -1098,9 +1098,9 @@ export default function FtceCourse({
           
           {/* Breadcrumbs Row */}
           <div style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            <span onClick={() => { setActiveTab('Overview'); setSearchQuery(''); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>All Test Prep</span>
+            <a href="/catalog" onClick={(e) => { e.preventDefault(); setActivePage('catalog'); setSearchQuery(''); }} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'inherit' }}>All Test Prep</a>
             <ChevronRight size={12} />
-            <span onClick={() => { setSearchQuery('FTCE'); setActivePage('search'); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>FTCE Test Preparation & Resources</span>
+            <a href="/search?q=FTCE" onClick={(e) => { e.preventDefault(); setSearchQuery('FTCE'); setActivePage('search'); }} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'inherit' }}>FTCE Test Preparation & Resources</a>
             <ChevronRight size={12} />
             <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>FTCE PEd</span>
           </div>
@@ -1171,7 +1171,7 @@ export default function FtceCourse({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>Course summary</h2>
             <p style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
-              PrepSummit.com's FTCE Professional Education Test (083) study guide helps you prepare for this important Florida teacher certification exam with confidence. This comprehensive prep course features engaging video lessons, quick self-check quizzes, and realistic full-length practice tests designed to strengthen your teaching knowledge and test-taking skills. With your PrepSummit.com subscription, you'll have full access to this FTCE 083 study guide along with every other FTCE prep course.
+              PrepSumit.com's FTCE Professional Education Test (083) study guide helps you prepare for this important Florida teacher certification exam with confidence. This comprehensive prep course features engaging video lessons, quick self-check quizzes, and realistic full-length practice tests designed to strengthen your teaching knowledge and test-taking skills. With your PrepSumit.com subscription, you'll have full access to this FTCE 083 study guide along with every other FTCE prep course.
             </p>
           </div>
 
@@ -1256,7 +1256,7 @@ export default function FtceCourse({
                   92%
                 </div>
                 <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: '1.4' }}>
-                  of students <strong>passed their exam</strong> after using PrepSummit.com*
+                  of students <strong>passed their exam</strong> after using PrepSumit.com*
                 </span>
               </div>
 
@@ -1277,7 +1277,7 @@ export default function FtceCourse({
                   96%
                 </div>
                 <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: '1.4' }}>
-                  found PrepSummit a <strong>valuable test prep</strong> resource
+                  found PrepSumit a <strong>valuable test prep</strong> resource
                 </span>
               </div>
 
@@ -1298,7 +1298,7 @@ export default function FtceCourse({
                   94%
                 </div>
                 <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: '1.4' }}>
-                  were <strong>more confident</strong> after using PrepSummit
+                  were <strong>more confident</strong> after using PrepSumit
                 </span>
               </div>
 
@@ -1516,7 +1516,7 @@ export default function FtceCourse({
                         ? "Excellent! You are well on your way to passing the FTCE Professional Education Test." 
                         : score >= 3 
                           ? "Good effort! A little more study and you'll be fully prepared to ace this exam." 
-                          : "Don't worry! PrepSummit has all the resources, practice questions, and guides to help you master these concepts."}
+                          : "Don't worry! PrepSumit has all the resources, practice questions, and guides to help you master these concepts."}
                     </p>
                   </div>
 
@@ -1610,7 +1610,7 @@ export default function FtceCourse({
                 minHeight: '220px'
               }}>
                 <p style={{ fontSize: '1rem', color: 'var(--text-primary)', lineHeight: '1.6', margin: 0, fontStyle: 'normal', fontWeight: '500' }}>
-                  "I used PrepSummit.com to study for my FTCE Professional Education Test. It was an amazing resource, and I easily passed the state exam on my first attempt! Now I am going to use PrepSummit.com for my GK exams! I would definitely recommend this program to anyone."
+                  "I used PrepSumit.com to study for my FTCE Professional Education Test. It was an amazing resource, and I easily passed the state exam on my first attempt! Now I am going to use PrepSumit.com for my GK exams! I would definitely recommend this program to anyone."
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #d2dbe5', paddingTop: '12px', marginTop: '4px' }}>
                   <div>
@@ -1655,7 +1655,7 @@ export default function FtceCourse({
                         <span style={{ color: '#222222', fontSize: '11px', fontWeight: '700', marginLeft: '6px' }}>5</span>
                       </div>
                       <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                        The best part about PrepSummit.com when compared to other test prep sites that I was using when preparing for my FTCE's was that PrepSummit.com was actually teaching and testing your comprehension in the subject matter whereas most other sites just gave you sample questions you would expect to find on the test. PrepSummit.com actually gave you ways to use the information you learned to make educated decisions and reasons for picking an answer as opposed to just memorizing which answer fits to what question.
+                        The best part about PrepSumit.com when compared to other test prep sites that I was using when preparing for my FTCE's was that PrepSumit.com was actually teaching and testing your comprehension in the subject matter whereas most other sites just gave you sample questions you would expect to find on the test. PrepSumit.com actually gave you ways to use the information you learned to make educated decisions and reasons for picking an answer as opposed to just memorizing which answer fits to what question.
                       </p>
                       <strong style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '4px' }}>
                         Encik Micah Ray Thomas
@@ -1673,7 +1673,7 @@ export default function FtceCourse({
                         <span style={{ color: '#222222', fontSize: '11px', fontWeight: '700', marginLeft: '6px' }}>5</span>
                       </div>
                       <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                        I love this site. I was struggle to pass my FCTE general knowledge test. I took the math portion eight times. The site was recommended by a friend. I use the lessons provided on the site. After studying with PrepSummit.com. I passed my test.
+                        I love this site. I was struggle to pass my FCTE general knowledge test. I took the math portion eight times. The site was recommended by a friend. I use the lessons provided on the site. After studying with PrepSumit.com. I passed my test.
                       </p>
                       <strong style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '4px' }}>
                         Margot
@@ -1691,7 +1691,7 @@ export default function FtceCourse({
                         <span style={{ color: '#222222', fontSize: '11px', fontWeight: '700', marginLeft: '6px' }}>5</span>
                       </div>
                       <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                        Trying to find the resources when studying for state licensure exams can be extremely difficult, but along came PrepSummit.com! I used PrepSummit.com to study for my FTCE k-12, FTCE Special Education, and Praxis Special Education exams. Without PrepSummit.com I would have failed but, I have passed 3/6, with only 3 left to take until all my exams are completed and one step closer to being a Special Ed Teacher. Thank you PrepSummit.com!
+                        Trying to find the resources when studying for state licensure exams can be extremely difficult, but along came PrepSumit.com! I used PrepSumit.com to study for my FTCE k-12, FTCE Special Education, and Praxis Special Education exams. Without PrepSumit.com I would have failed but, I have passed 3/6, with only 3 left to take until all my exams are completed and one step closer to being a Special Ed Teacher. Thank you PrepSumit.com!
                       </p>
                       <strong style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginTop: '4px' }}>
                         Nina Bell
@@ -1779,7 +1779,7 @@ export default function FtceCourse({
               {activeTab === 'Overview' && (
                 <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '24px' }}>
                   <p style={{ fontSize: '0.98rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
-                    This comprehensive study guide is meticulously designed to help you prepare for the <strong>FTCE Professional Education Test (PEd)</strong>. Featuring self-paced video lessons and detailed interactive test explanations, PrepSummit ensures you master Florida's teacher competencies with confidence.
+                    This comprehensive study guide is meticulously designed to help you prepare for the <strong>FTCE Professional Education Test (PEd)</strong>. Featuring self-paced video lessons and detailed interactive test explanations, PrepSumit ensures you master Florida's teacher competencies with confidence.
                   </p>
                   
                   <div style={{ 
@@ -2272,7 +2272,7 @@ export default function FtceCourse({
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
             <div style={{ height: '140px', backgroundColor: '#cbd5e1' }}>
-              <img src="https://images.unsplash.com/photo-1453733190148-c44698c26588?w=300&auto=format&fit=crop&q=80" alt="AP Calculus" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="https://images.unsplash.com/photo-1518133835878-5a93cc3f89e5?w=300&auto=format&fit=crop&q=80" alt="AP Calculus" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--math-color)' }}>Mathematics</span>

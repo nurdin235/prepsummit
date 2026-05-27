@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronRight, ChevronDown, Search, Briefcase, Lightbulb, GraduationCap, ListPlus, Clock } from 'lucide-react';
 
-// Custom Dropdown Component to mirror PrepSummit.com's custom dropdowns
+// Custom Dropdown Component to mirror PrepSumit.com's custom dropdowns
 function CardDropdown({ placeholder, sections, onSelect, openUpwards = false, isOpen, onToggle }) {
   const containerRef = useRef(null);
 
@@ -130,6 +130,128 @@ export default function Home({
   const [activeTopTab, setActiveTopTab] = useState(0);
   const [activeDropdownIdx, setActiveDropdownIdx] = useState(null);
   const [localSearch, setLocalSearch] = useState('');
+
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const testimonials = [
+    {
+      name: "Aimee K.",
+      location: "Miami, FL",
+      course: "FTCE GK Professional Education",
+      text: "I was extremely anxious about the FTCE GK Professional Education test after failing it twice. PrepSumit's practice exams matched the actual test formatting almost perfectly. The explanations under each question helped me understand the reasoning instead of just memorizing answers. I finally passed!",
+      img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Marcus T.",
+      location: "Orlando, FL",
+      course: "FTCE Elementary Education K-6",
+      text: "The science and math portions of the FTCE Elementary K-6 exam were my biggest hurdles. The bite-sized videos on PrepSumit broke down complex concepts into simple, actionable steps. It saved me weeks of studying and I passed all four subtests on my first try.",
+      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Sarah D.",
+      location: "Dallas, TX",
+      course: "TEAS Test Prep",
+      text: "PrepSumit's TEAS study guide was an absolute lifesaver. The science section is notoriously difficult, but the detailed anatomical reviews and practice quizzes gave me the confidence I needed. My score jumped from a 68% on my diagnostic to an 89% on the real exam.",
+      img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "John W.",
+      location: "Seattle, WA",
+      course: "AP Calculus BC",
+      text: "As a high school student self-studying for AP Calculus BC, I struggled to find clear explanations for Taylor series and integration techniques. PrepSumit's calculus review is visually engaging and directly applicable. I ended up scoring a 5 on the exam!",
+      img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Sharla W.",
+      location: "Boston, MA",
+      course: "CLEP American Government",
+      text: "I needed college credits fast to graduate on time. PrepSumit's CLEP American Government course allowed me to learn the material in a fraction of the time. The flashcard deck was perfect for studying on my commute. Passed with room to spare!",
+      img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Emily R.",
+      location: "Chicago, IL",
+      course: "Praxis Core Academic Skills",
+      text: "PrepSumit made preparing for the Praxis Core writing and reading sections so straightforward. The essay writing guides and sample prompts helped me structure my responses perfectly. Sincere thanks to the team for such a well-built prep tool.",
+      img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "David L.",
+      location: "Atlanta, GA",
+      course: "FTCE Earth-Space Science 6-12",
+      text: "The FTCE Earth Science exam has so much detail, and other study materials are either too shallow or overwhelming. PrepSumit hit the perfect sweet spot. The practice questions were highly relevant and the explanations were crystal clear.",
+      img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Amanda M.",
+      location: "Phoenix, AZ",
+      course: "TEAS Allied Health",
+      text: "I tried two other popular TEAS prep books but felt completely lost in the math section. The step-by-step video breakdowns of algebra and statistics on PrepSumit finally made it click for me. I got into my first-choice nursing program!",
+      img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Robert P.",
+      location: "Denver, CO",
+      course: "Praxis Elementary Education",
+      text: "What I love most about PrepSumit is the structure. You don't waste time scrolling through long textbooks. The interface is clean, the quizzes keep you active, and the AI tutor resolves any doubt instantly. Recommended to all future teachers.",
+      img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200"
+    },
+    {
+      name: "Jessica K.",
+      location: "New York, NY",
+      course: "College Chemistry",
+      text: "Chemistry was always my worst subject, but the chemistry review course here made organic pathways and stoichiometry incredibly clear. The interactive quizzes forced me to apply what I learned immediately. I ended up with an A in my college course!",
+      img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200"
+    }
+  ];
+
+  const sliderRef = useRef(null);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const interval = setInterval(() => {
+      if (sliderRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          sliderRef.current.scrollBy({ left: 360, behavior: 'smooth' });
+        }
+      }
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isMobile]);
+
+  const handleScrollNext = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        sliderRef.current.scrollBy({ left: 360, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleScrollPrev = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth } = sliderRef.current;
+      if (scrollLeft <= 10) {
+        sliderRef.current.scrollTo({ left: scrollWidth, behavior: 'smooth' });
+      } else {
+        sliderRef.current.scrollBy({ left: -360, behavior: 'smooth' });
+      }
+    }
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -402,9 +524,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(0)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('catalog')}
                   >
-                    Study for class <ChevronRight size={16} />
+                    <a href="/catalog" onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }} style={{ color: '#13809c', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      Study for class <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Master new concepts with helpful video lessons, practice questions and step-by-step answer explanations.
@@ -464,9 +587,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(1)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('ftce')}
                   >
-                    Ace your test prep <ChevronRight size={16} />
+                    <a href="/ftce" onClick={(e) => { e.preventDefault(); setActivePage('ftce'); }} style={{ color: '#000000', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      Ace your test prep <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     92% pass rate. Prep for 1,500+ exams with custom study guides, practice tests and video lessons.
@@ -513,7 +637,7 @@ export default function Home({
                 {/* Image */}
                 <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
-                    src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=600" 
+                    src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=600" 
                     alt="Earn college credit" 
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
@@ -534,9 +658,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(2)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('catalog')}
                   >
-                    Earn college credit <ChevronRight size={16} />
+                    <a href="/category/college-credit" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('college-credit'); }} style={{ color: '#000000', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      Earn college credit <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Save time and money on 220+ upper and lower-division courses and skip what you already know.
@@ -623,7 +748,7 @@ export default function Home({
                 {/* Image */}
                 <div style={{ width: '100%', height: '170px', overflow: 'hidden', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
                   <img 
-                    src="https://images.unsplash.com/photo-1544531586-fde5298cdd43?auto=format&fit=crop&q=80&w=600" 
+                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600" 
                     alt="Teach your class" 
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
                   />
@@ -644,9 +769,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(3)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('catalog')}
                   >
-                    Teach your class <ChevronRight size={16} />
+                    <a href="/category/teacher-resources" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('teacher-resources'); }} style={{ color: '#000000', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      Teach your class <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Plan lessons with ease using state-standard-aligned videos and practice for all K-12 subjects.
@@ -720,9 +846,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(4)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('catalog')}
                   >
-                    Homeschool your child <ChevronRight size={16} />
+                    <a href="/category/homeschool" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('homeschool'); }} style={{ color: '#000000', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      Homeschool your child <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Earn certificates of completion and potential college credit with full 6-12 curriculum.
@@ -786,9 +913,10 @@ export default function Home({
                     }}
                     onMouseEnter={() => setHoveredCard(5)}
                     onMouseLeave={() => setHoveredCard(null)}
-                    onClick={() => setActivePage('catalog')}
                   >
-                    AI mastery <ChevronRight size={16} />
+                    <a href="/category/college-credit" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('college-credit'); }} style={{ color: '#000000', textDecoration: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      AI mastery <ChevronRight size={16} />
+                    </a>
                   </h3>
                   <p style={{ color: '#4a5568', fontSize: '0.92rem', lineHeight: '1.45', margin: '0 auto', maxWidth: '280px' }}>
                     Practical AI skills for the modern workforce, with optional college credit available.
@@ -895,8 +1023,9 @@ export default function Home({
                   praxis<sup style={{ fontSize: '1.2rem', fontWeight: '600', position: 'relative', top: '-1.5em' }}>®</sup>
                 </span>
               </div>
-              <button 
-                onClick={() => setActivePage('catalog')}
+              <a 
+                href="/catalog"
+                onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }}
                 style={{
                   backgroundColor: '#9bcff8',
                   color: '#000000',
@@ -906,13 +1035,15 @@ export default function Home({
                   fontSize: '1.05rem',
                   fontWeight: '800',
                   cursor: 'pointer',
-                  transition: 'background-color 0.2s'
+                  transition: 'background-color 0.2s',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
                 onMouseOver={(e) => e.target.style.backgroundColor = '#89c5f4'}
                 onMouseOut={(e) => e.target.style.backgroundColor = '#9bcff8'}
               >
                 Learn more
-              </button>
+              </a>
             </div>
 
             {/* TOEFL Logo and Button */}
@@ -925,8 +1056,9 @@ export default function Home({
                   toefl<sup style={{ fontSize: '1.2rem', fontWeight: '600', position: 'relative', top: '-1.5em' }}>®</sup>
                 </span>
               </div>
-              <button 
-                onClick={() => setActivePage('catalog')}
+              <a 
+                href="/catalog"
+                onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }}
                 style={{
                   backgroundColor: '#9bcff8',
                   color: '#000000',
@@ -936,13 +1068,15 @@ export default function Home({
                   fontSize: '1.05rem',
                   fontWeight: '800',
                   cursor: 'pointer',
-                  transition: 'background-color 0.2s'
+                  transition: 'background-color 0.2s',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
                 onMouseOver={(e) => e.target.style.backgroundColor = '#89c5f4'}
                 onMouseOut={(e) => e.target.style.backgroundColor = '#9bcff8'}
               >
                 Learn more
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -1030,8 +1164,9 @@ export default function Home({
               </div>
 
               <div style={{ marginTop: '32px' }}>
-                <span 
-                  onClick={() => setActivePage('catalog')}
+                <a 
+                  href="/catalog"
+                  onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }}
                   style={{ 
                     color: '#9bcff8', 
                     fontSize: '1.05rem', 
@@ -1041,7 +1176,7 @@ export default function Home({
                   }}
                 >
                   Learn more
-                </span>
+                </a>
               </div>
             </div>
 
@@ -1277,7 +1412,7 @@ export default function Home({
                     <div style={{ display: 'flex', gap: '12px', cursor: 'pointer' }}>
                       <div style={{ width: '100px', height: '60px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                         <img 
-                          src="https://images.unsplash.com/photo-1596700078839-a8cbf32a5127?auto=format&fit=crop&q=80&w=200" 
+                          src="https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&q=80&w=200" 
                           alt="Thumbnail" 
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                         />
@@ -1293,7 +1428,7 @@ export default function Home({
                     <div style={{ display: 'flex', gap: '12px', cursor: 'pointer' }}>
                       <div style={{ width: '100px', height: '60px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                         <img 
-                          src="https://images.unsplash.com/photo-1550993540-3372c3dffb74?auto=format&fit=crop&q=80&w=200" 
+                          src="https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&q=80&w=200" 
                           alt="Frog Thumbnail" 
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                         />
@@ -1325,7 +1460,7 @@ export default function Home({
                     <div style={{ display: 'flex', gap: '12px', cursor: 'pointer' }}>
                       <div style={{ width: '100px', height: '60px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                         <img 
-                          src="https://images.unsplash.com/photo-1428353381622-cba98317a151?auto=format&fit=crop&q=80&w=200" 
+                          src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=200" 
                           alt="Forest Thumbnail" 
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                         />
@@ -1392,117 +1527,199 @@ export default function Home({
             Real people. Real breakthroughs.
           </h2>
 
-          <div className="responsive-grid-3" style={{ gap: '32px' }}>
-            
-            {/* Card 1 */}
-            <div style={{ 
-              backgroundColor: '#ffffff', 
-              borderRadius: '16px', 
-              padding: '40px 32px 60px 32px', 
-              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-              position: 'relative',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
-              <div style={{ color: '#ffb627', fontSize: '5rem', fontFamily: 'serif', lineHeight: '0.6', alignSelf: 'flex-start', marginBottom: '20px' }}>
-                “
-              </div>
-              <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                PrepSummit.com allowed me to complete my courses in a fraction of the time it took my peers and for a fraction of the cost. I highly recommend their comprehensive programs.
-              </p>
-              <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>Aimee K.</h4>
-              {/* Profile Image Hanging */}
-              <div style={{ 
-                position: 'absolute', 
-                bottom: '-40px', 
-                left: '50%', 
-                transform: 'translateX(-50%)',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '4px solid #ffffff',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-              }}>
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200" alt="Aimee K." style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            </div>
+          {!isMobile ? (
+            <div style={{ position: 'relative', width: '100%' }}>
+              {/* Prev Button */}
+              <button 
+                onClick={handleScrollPrev}
+                style={{
+                  position: 'absolute',
+                  left: '-48px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#13809c',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 10,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={e => { e.currentTarget.style.backgroundColor = '#13809c'; e.currentTarget.style.color = '#ffffff'; }}
+                onMouseOut={e => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.color = '#13809c'; }}
+                aria-label="Previous Reviews"
+              >
+                <ChevronRight size={24} style={{ transform: 'rotate(180deg)' }} />
+              </button>
 
-            {/* Card 2 */}
-            <div style={{ 
-              backgroundColor: '#ffffff', 
-              borderRadius: '16px', 
-              padding: '40px 32px 60px 32px', 
-              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-              position: 'relative',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
-              <div style={{ color: '#ffb627', fontSize: '5rem', fontFamily: 'serif', lineHeight: '0.6', alignSelf: 'flex-start', marginBottom: '20px' }}>
-                “
+              {/* Slider Container */}
+              <div 
+                ref={sliderRef}
+                style={{
+                  display: 'flex',
+                  gap: '24px',
+                  overflowX: 'auto',
+                  scrollBehavior: 'smooth',
+                  padding: '20px 4px 80px 4px',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
+                className="hide-scrollbar"
+              >
+                {testimonials.map((test, idx) => (
+                  <div 
+                    key={idx}
+                    style={{ 
+                      flex: '0 0 340px',
+                      backgroundColor: '#ffffff', 
+                      borderRadius: '16px', 
+                      padding: '40px 32px 60px 32px', 
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                      position: 'relative',
+                      textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      minHeight: '380px'
+                    }}
+                  >
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <div style={{ color: '#ffb627', fontSize: '5rem', fontFamily: 'serif', lineHeight: '0.6', alignSelf: 'flex-start', marginBottom: '10px' }}>
+                        “
+                      </div>
+                      <p style={{ color: '#4a5568', fontSize: '0.98rem', lineHeight: '1.6', marginBottom: '24px', textAlign: 'left' }}>
+                        {test.text}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                      <h4 style={{ color: '#000000', fontSize: '1.15rem', fontWeight: '800', margin: '0' }}>{test.name}</h4>
+                      <span style={{ fontSize: '0.8rem', color: '#718096', fontWeight: '600', marginTop: '2px', textAlign: 'center', display: 'block' }}>{test.course} • {test.location}</span>
+                      
+                      {/* Profile Image Hanging */}
+                      <div style={{ 
+                        position: 'absolute', 
+                        bottom: '-40px', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)',
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        border: '4px solid #ffffff',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}>
+                        <img src={test.img} alt={test.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                I always received poor grades in History. PrepSummit.com really helped me learn the material and I received my highest CLEP score ever!
-              </p>
-              <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>Sharla W.</h4>
-              {/* Profile Image Hanging */}
-              <div style={{ 
-                position: 'absolute', 
-                bottom: '-40px', 
-                left: '50%', 
-                transform: 'translateX(-50%)',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '4px solid #ffffff',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-              }}>
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200" alt="Sharla W." style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            </div>
 
-            {/* Card 3 */}
-            <div style={{ 
-              backgroundColor: '#ffffff', 
-              borderRadius: '16px', 
-              padding: '40px 32px 60px 32px', 
-              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-              position: 'relative',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
-              <div style={{ color: '#ffb627', fontSize: '5rem', fontFamily: 'serif', lineHeight: '0.6', alignSelf: 'flex-start', marginBottom: '20px' }}>
-                “
-              </div>
-              <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                PrepSummit.com is literally the best guide to help you through rigorous class material and will help foster growth within your educational journey.
-              </p>
-              <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>John W.</h4>
-              {/* Profile Image Hanging */}
-              <div style={{ 
-                position: 'absolute', 
-                bottom: '-40px', 
-                left: '50%', 
-                transform: 'translateX(-50%)',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '4px solid #ffffff',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-              }}>
-                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" alt="John W." style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+              {/* Next Button */}
+              <button 
+                onClick={handleScrollNext}
+                style={{
+                  position: 'absolute',
+                  right: '-48px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  border: '1.5px solid #cbd5e1',
+                  color: '#13809c',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 10,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={e => { e.currentTarget.style.backgroundColor = '#13809c'; e.currentTarget.style.color = '#ffffff'; }}
+                onMouseOut={e => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.color = '#13809c'; }}
+                aria-label="Next Reviews"
+              >
+                <ChevronRight size={24} />
+              </button>
             </div>
+          ) : (
+            /* Mobile View: Vertical stack with View More button */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '56px', width: '100%', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '56px', width: '100%' }}>
+                {testimonials.slice(0, showAllReviews ? 10 : 3).map((test, idx) => (
+                  <div 
+                    key={idx}
+                    style={{ 
+                      backgroundColor: '#ffffff', 
+                      borderRadius: '16px', 
+                      padding: '40px 24px 60px 24px', 
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                      position: 'relative',
+                      textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      minHeight: '280px'
+                    }}
+                  >
+                    <div style={{ color: '#ffb627', fontSize: '5rem', fontFamily: 'serif', lineHeight: '0.6', alignSelf: 'flex-start', marginBottom: '10px' }}>
+                      “
+                    </div>
+                    <p style={{ color: '#4a5568', fontSize: '0.98rem', lineHeight: '1.6', marginBottom: '24px', textAlign: 'left' }}>
+                      {test.text}
+                    </p>
+                    <h4 style={{ color: '#000000', fontSize: '1.15rem', fontWeight: '800', margin: '0' }}>{test.name}</h4>
+                    <span style={{ fontSize: '0.8rem', color: '#718096', fontWeight: '600', marginTop: '2px', display: 'block', textAlign: 'center' }}>{test.course} • {test.location}</span>
+                    
+                    {/* Profile Image Hanging */}
+                    <div style={{ 
+                      position: 'absolute', 
+                      bottom: '-40px', 
+                      left: '50%', 
+                      transform: 'translateX(-50%)',
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      border: '4px solid #ffffff',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}>
+                      <img src={test.img} alt={test.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-          </div>
+              {/* View More / View Less Button */}
+              <button 
+                onClick={() => setShowAllReviews(!showAllReviews)}
+                style={{
+                  marginTop: '16px',
+                  backgroundColor: '#ffffff',
+                  border: '2px solid #13809c',
+                  color: '#13809c',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  padding: '12px 28px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {showAllReviews ? 'Show Less Reviews' : 'View More Reviews (10+)'}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -1626,11 +1843,10 @@ export default function Home({
                 <li>Trusted by hundreds of universities and higher education partners</li>
                 <li>Over 92% of students pass their exam</li>
                 <li>Practice personalized with AI helps learners focus their time where it matters most</li>
-              </ul>
-
-              <div>
-                <button 
-                  onClick={() => setActivePage('catalog')}
+                <div>
+                <a 
+                  href="/catalog"
+                  onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }}
                   style={{ 
                     padding: '12px 32px',
                     backgroundColor: 'transparent',
@@ -1640,12 +1856,15 @@ export default function Home({
                     fontSize: '1.1rem',
                     fontWeight: '700',
                     cursor: 'pointer',
-                    fontFamily: "var(--font-body)"
+                    fontFamily: "var(--font-body)",
+                    textDecoration: 'none',
+                    display: 'inline-block'
                   }}
                 >
-                  Learn more
-                </button>
+                  Explore Course Catalog
+                </a>
               </div>
+              </ul>
             </div>
           </div>
         </div>
@@ -1724,16 +1943,19 @@ export default function Home({
               { name: 'Science', img: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=400' },
               { name: 'Social Science', img: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=400' }
             ].map((subject, idx) => (
-              <div 
+              <a 
                 key={idx}
-                onClick={() => setActivePage('catalog')}
+                href="/catalog"
+                onClick={(e) => { e.preventDefault(); setActivePage('catalog'); }}
                 style={{
                   position: 'relative',
                   borderRadius: '12px',
                   overflow: 'hidden',
                   height: '140px',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  display: 'block',
+                  textDecoration: 'none'
                 }}
               >
                 <img 
@@ -1756,7 +1978,7 @@ export default function Home({
                     {subject.name}
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -1942,7 +2164,7 @@ export default function Home({
             }}>
               <div style={{ height: '300px', width: '100%' }}>
                 <img 
-                  src="https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?auto=format&fit=crop&q=80&w=800" 
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" 
                   alt="Diverse group of people" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
@@ -2054,7 +2276,7 @@ export default function Home({
         {/* Background Image */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1 }}>
           <img 
-            src="https://images.unsplash.com/photo-1537368910025-702350c1b4e4?auto=format&fit=crop&q=80&w=1600" 
+            src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&q=80&w=1600" 
             alt="Smiling man in scrubs" 
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }} 
           />

@@ -45,7 +45,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
       id: 'praxis-principles',
       title: 'Praxis Principles of Learning and Teaching: PreK-12 (5625) Study Guide and Test Prep',
       breadcrumb: 'Courses / Test Prep',
-      description: "This course will help you prepare for the Praxis Principles of Learning and Teaching: PreK-12 (5625) exam. Let PrepSummit.com guide you to success on test day as you prepare to take this certification test.",
+      description: "This course will help you prepare for the Praxis Principles of Learning and Teaching: PreK-12 (5625) exam. Let PrepSumit.com guide you to success on test day as you prepare to take this certification test.",
       type: 'course',
       iconType: 'video',
       actions: ['View Course', 'Take Practice Exam']
@@ -63,7 +63,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
       id: 'praxis-reading-5713',
       title: 'Praxis Core Reading Test Prep | Praxis 5713',
       breadcrumb: 'Courses / Test Prep',
-      description: "Read about the content covered on the Praxis Core Reading (5713), as well as the exam policies, format, passing scores, and other relevant test information. Prepare for the Praxis Core Academic Skills for Educators Reading exam with PrepSummit.com's test-aligned preparation materials, including a diagnostic test, a personalized study plan, video lessons, full-length practice tests, and tips on how to ace your exam.",
+      description: "Read about the content covered on the Praxis Core Reading (5713), as well as the exam policies, format, passing scores, and other relevant test information. Prepare for the Praxis Core Academic Skills for Educators Reading exam with PrepSumit.com's test-aligned preparation materials, including a diagnostic test, a personalized study plan, video lessons, full-length practice tests, and tips on how to ace your exam.",
       type: 'course',
       iconType: 'text',
       actions: ['View Course', 'Take Practice Exam']
@@ -100,7 +100,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
       id: 'praxis-math-5733',
       title: 'Praxis Core Math Test Prep | Praxis 5733',
       breadcrumb: 'Courses / Mathematics',
-      description: "Familiarize yourself with the Praxis 5733 exam's content, format, and registration process. Learn all you need to know to pass the Praxis Core Academic Skills for Educators: Mathematics test with PrepSummit.com's full range of test prep resources.",
+      description: "Familiarize yourself with the Praxis 5733 exam's content, format, and registration process. Learn all you need to know to pass the Praxis Core Academic Skills for Educators: Mathematics test with PrepSumit.com's full range of test prep resources.",
       type: 'course',
       iconType: 'text',
       actions: ['View Course', 'Take Practice Exam']
@@ -109,7 +109,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
       id: 'praxis-combined-5752',
       title: 'Praxis Core Combined Test Prep | Praxis 5752',
       breadcrumb: 'Courses / Test Prep',
-      description: "Get an overview of the Praxis 5752 and learn about the subtests, topics, question formats, registration process, and more. PrepSummit.com's prep material will walk you through all the details necessary to pass your Praxis Core Academic Skills for Educators exam.",
+      description: "Get an overview of the Praxis 5752 and learn about the subtests, topics, question formats, registration process, and more. PrepSumit.com's prep material will walk you through all the details necessary to pass your Praxis Core Academic Skills for Educators exam.",
       type: 'course',
       iconType: 'text',
       actions: ['View Course', 'Take Practice Exam']
@@ -293,7 +293,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
       id: 'praxis-biology-general-guide',
       title: 'Praxis Biology and General Science: Practice and Study Guide',
       breadcrumb: 'Courses / Science',
-      description: "The Praxis Biology and General Science exam has been discontinued. Please view the PrepSummit.com course Praxis General Science (5435): Practice & Study Guide instead. That course is designed to fully prepare you for your teacher certification exam.",
+      description: "The Praxis Biology and General Science exam has been discontinued. Please view the PrepSumit.com course Praxis General Science (5435): Practice & Study Guide instead. That course is designed to fully prepare you for your teacher certification exam.",
       type: 'course',
       iconType: 'video',
       actions: ['View Course', 'Take Practice Exam']
@@ -575,7 +575,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
         onStartSignup();
       }
     } else {
-      // Replicates PrepSummit.com: other actions (Take Practice Exam, View Article, View Chapter, mock courses) trigger account creation
+      // Replicates PrepSumit.com: other actions (Take Practice Exam, View Article, View Chapter, mock courses) trigger account creation
       onStartSignup();
     }
   };
@@ -608,7 +608,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
     );
   };
 
-  // PrepSummit.com dynamic pagination numbers helper
+  // PrepSumit.com dynamic pagination numbers helper
   const getPageNumbers = () => {
     const pages = [];
     if (totalPages <= 6) {
@@ -748,7 +748,7 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
           background-color: #13809c;
         }
 
-        /* Small caret pointer under active tab as per PrepSummit.com style */
+        /* Small caret pointer under active tab as per PrepSumit.com style */
         .search-tab-item.active::before {
           content: '';
           position: absolute;
@@ -1117,17 +1117,33 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
         {/* Left Column: List */}
         <div className="search-results-list">
           {currentItems.length > 0 ? (
-            currentItems.map((item) => (
-              <div key={item.id} className="search-result-item">
-                <SearchResultIcon type={item.iconType} />
+            currentItems.map((item) => {
+              const itemHref = (() => {
+                if (item.originalCourse) {
+                  if (item.originalCourse.id === 'ftce-professional-education-test') return '/ftce';
+                  if (item.originalCourse.id === 'teas-prep') return '/teas';
+                  return `/courses/${item.originalCourse.id}`;
+                }
+                if (item.id === 'praxis-combined-5752' || item.id === 'praxis-math-5733') {
+                  return '/courses/praxis-core';
+                }
+                return '/signup';
+              })();
+              return (
+                <div key={item.id} className="search-result-item">
+                  <SearchResultIcon type={item.iconType} />
 
-                <div className="result-content-box">
-                  <a
-                    className="result-title-link"
-                    onClick={() => handleActionClick(item.type === 'course' ? 'View Course' : 'View Chapter', item)}
-                  >
-                    {item.title}
-                  </a>
+                  <div className="result-content-box">
+                    <a
+                      href={itemHref}
+                      className="result-title-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleActionClick(item.type === 'course' ? 'View Course' : 'View Chapter', item);
+                      }}
+                    >
+                      {item.title}
+                    </a>
 
                   {item.breadcrumb && (
                     <div className="result-category-breadcrumb">{item.breadcrumb}</div>
@@ -1138,18 +1154,24 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
                   <div className="result-actions-strip">
                     {item.actions &&
                       item.actions.map((act) => (
-                        <button
+                        <a
                           key={act}
+                          href={act === 'View Course' || act === 'View Chapter' ? itemHref : '/signup'}
                           className="result-action-link"
-                          onClick={() => handleActionClick(act, item)}
+                          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleActionClick(act, item);
+                          }}
                         >
                           {act} <ChevronRight size={12} strokeWidth={2.5} />
-                        </button>
+                        </a>
                       ))}
                   </div>
                 </div>
               </div>
-            ))
+              );
+            })
           ) : (
             <div style={{ textAlign: 'center', padding: '40px 16px', color: '#666666' }}>
               <AlertCircle size={40} style={{ color: '#94a3b8', marginBottom: '12px' }} />
@@ -1206,13 +1228,18 @@ export default function SearchResults({ searchQuery, setSearchQuery, onSelectCou
             <CheckCircle size={44} color="#13809c" style={{ opacity: 0.9 }} />
             <h3 className="master-subject-title">Master any subject</h3>
             <p className="master-subject-subtitle">Watch short, fun videos</p>
-            <button className="master-subject-btn" onClick={onStartSignup}>
+            <a 
+              href="/signup" 
+              className="master-subject-btn" 
+              onClick={(e) => { e.preventDefault(); onStartSignup(); }} 
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               Create an account <ChevronRight size={14} strokeWidth={2.5} />
-            </button>
+            </a>
           </div>
 
           <div className="sidebar-view-courses-text">
-            View <span className="sidebar-view-courses-link" onClick={() => onSelectCourse(courses.find(c => c.id === 'ftce-professional-education-test'))}>courses</span> related to your search.
+            View <a href="/ftce" className="sidebar-view-courses-link" onClick={(e) => { e.preventDefault(); onSelectCourse(courses.find(c => c.id === 'ftce-professional-education-test')); }} style={{ textDecoration: 'underline', color: '#13809c', cursor: 'pointer' }}>courses</a> related to your search.
           </div>
         </div>
       </div>

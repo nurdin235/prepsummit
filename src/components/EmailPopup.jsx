@@ -401,7 +401,7 @@ export default function EmailPopup({ isOpen, onClose, onContinue }) {
               margin: 0,
               zIndex: 1
             }}>
-              of students <strong style={{ color: '#e15b3e', fontWeight: '700' }}>passed their exam</strong> after using PrepSummit.com*
+              of students <strong style={{ color: '#e15b3e', fontWeight: '700' }}>passed their exam</strong> after using PrepSumit.com*
             </p>
           </div>
 

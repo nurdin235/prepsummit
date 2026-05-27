@@ -472,9 +472,9 @@ export default function Navbar({
         fontWeight: '600',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }} className="hide-on-mobile">
-        <span onClick={() => onSelectCategoryLanding('teacher-resources')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Teachers</span>
-        <span onClick={() => onSelectCategoryLanding('college-credit')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Working Scholars®</span>
-        <span onClick={() => onSelectCategoryLanding('college-credit')} style={{ cursor: 'pointer', opacity: 0.95 }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For College Credit</span>
+        <a href="/category/teacher-resources" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('teacher-resources'); }} style={{ cursor: 'pointer', opacity: 0.95, textDecoration: 'none', color: '#ffffff' }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Teachers</a>
+        <a href="/category/college-credit" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('college-credit'); }} style={{ cursor: 'pointer', opacity: 0.95, textDecoration: 'none', color: '#ffffff' }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For Working Scholars®</a>
+        <a href="/category/college-credit" onClick={(e) => { e.preventDefault(); onSelectCategoryLanding('college-credit'); }} style={{ cursor: 'pointer', opacity: 0.95, textDecoration: 'none', color: '#ffffff' }} onMouseOver={e => e.target.style.opacity = 1} onMouseOut={e => e.target.style.opacity = 0.95}>For College Credit</a>
       </div>
 
       {/* 2. Main Navigation Header */}
@@ -510,10 +510,11 @@ export default function Navbar({
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
 
-            {/* Brand Logo - Styled precisely like PrepSummit.com */}
-            <div 
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
-              onClick={() => { setActivePage('home'); setSearchQuery(''); }}
+            {/* Brand Logo - Styled precisely like PrepSumit.com */}
+            <a 
+              href="/"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', textDecoration: 'none' }}
+              onClick={(e) => { e.preventDefault(); setActivePage('home'); setSearchQuery(''); }}
             >
               <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15 15 L85 50 L15 85 Z" fill="#13809c" />
@@ -527,28 +528,29 @@ export default function Navbar({
                 color: '#1f4e5a',
                 letterSpacing: '-0.03em'
               }}>
-                PrepSummit<span style={{ color: '#ffb627' }}>.com</span>
+                PrepSumit<span style={{ color: '#ffb627' }}>.com</span>
               </span>
-            </div>
+            </a>
 
             {/* Desktop Navigation Links */}
             <nav className="desktop-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '18px', marginLeft: '12px' }}>
               
               {/* Plans Link */}
-              <button 
-                onClick={() => { onStartSignup(); }}
+              <a 
+                href="/academy/plans.html"
+                onClick={(e) => { e.preventDefault(); setActivePage('plans'); }}
                 style={{
                   background: 'none', border: 'none', fontFamily: 'var(--font-heading)',
                   fontWeight: '700', fontSize: '0.92rem', color: '#222222', cursor: 'pointer',
-                  padding: '16px 0', transition: 'color 0.2s'
+                  padding: '16px 0', transition: 'color 0.2s', textDecoration: 'none', display: 'inline-block'
                 }}
                 onMouseOver={(e) => e.target.style.color = '#13809c'}
                 onMouseOut={(e) => e.target.style.color = '#222222'}
               >
                 Plans
-              </button>
+              </a>
 
-              {/* Dynamic Dropdowns based on PrepSummit.com categories */}
+              {/* Dynamic Dropdowns based on PrepSumit.com categories */}
               {['courses', 'subjects', 'teachers', 'certifications', 'degrees'].map((key) => {
                 let label = key.charAt(0).toUpperCase() + key.slice(1);
                 if (key === 'degrees') label = 'College Degrees';
@@ -633,31 +635,50 @@ export default function Navbar({
                         <div className="nav-dropdown-right">
                           {(() => {
                             const currentSubCat = dropdownStructure[key].find(cat => cat.name === activeSubCategory[key]) || dropdownStructure[key][0];
-                            return currentSubCat.items.map((subItem, idx) => (
-                              <span
-                                key={idx}
-                                className="nav-dropdown-sub-item"
-                                onClick={() => {
-                                  if (subItem.landing) {
-                                    onSelectCategoryLanding(subItem.landing);
-                                  } else if (subItem.id) {
-                                    selectCourseById(subItem.id);
-                                  } else if (subItem.query) {
-                                    setSearchQuery(subItem.query);
-                                    if (subItem.query === 'FTCE') {
-                                      setActivePage('ftce');
-                                    } else if (subItem.query === 'TEAS') {
-                                      setActivePage('teas');
-                                    } else {
-                                      setActivePage('search');
+                            return currentSubCat.items.map((subItem, idx) => {
+                              const href = (() => {
+                                if (subItem.landing) return `/category/${subItem.landing}`;
+                                if (subItem.id) {
+                                  if (subItem.id === 'ftce-professional-education-test') return '/ftce';
+                                  if (subItem.id === 'teas-prep') return '/teas';
+                                  return `/courses/${subItem.id}`;
+                                }
+                                if (subItem.query) {
+                                  if (subItem.query === 'FTCE') return '/ftce';
+                                  if (subItem.query === 'TEAS') return '/teas';
+                                  return `/search?q=${encodeURIComponent(subItem.query)}`;
+                                }
+                                return '#';
+                              })();
+                              return (
+                                <a
+                                  key={idx}
+                                  href={href}
+                                  className="nav-dropdown-sub-item"
+                                  style={{ textDecoration: 'none' }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (subItem.landing) {
+                                      onSelectCategoryLanding(subItem.landing);
+                                    } else if (subItem.id) {
+                                      selectCourseById(subItem.id);
+                                    } else if (subItem.query) {
+                                      setSearchQuery(subItem.query);
+                                      if (subItem.query === 'FTCE') {
+                                        setActivePage('ftce');
+                                      } else if (subItem.query === 'TEAS') {
+                                        setActivePage('teas');
+                                      } else {
+                                        setActivePage('search');
+                                      }
                                     }
-                                  }
-                                  setActiveDropdown(null);
-                                }}
-                              >
-                                {subItem.text}
-                              </span>
-                            ));
+                                    setActiveDropdown(null);
+                                  }}
+                                >
+                                  {subItem.text}
+                                </a>
+                              );
+                            });
                           })()}
                         </div>
                       </div>
@@ -673,8 +694,9 @@ export default function Navbar({
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             
             {/* Log In Button - White background, thin teal border */}
-            <button 
-              onClick={() => setActivePage('login')}
+            <a 
+              href="/login"
+              onClick={(e) => { e.preventDefault(); setActivePage('login'); }}
               style={{
                 backgroundColor: '#ffffff',
                 border: '1.5px solid #13809c',
@@ -684,17 +706,20 @@ export default function Navbar({
                 fontSize: '0.88rem',
                 padding: '8px 18px',
                 cursor: 'pointer',
-                transition: 'background-color 0.2s'
+                transition: 'background-color 0.2s',
+                textDecoration: 'none',
+                display: 'inline-block'
               }}
               className="desktop-only"
               onMouseOver={(e) => e.target.style.backgroundColor = 'rgba(19, 128, 156, 0.04)'}
               onMouseOut={(e) => e.target.style.backgroundColor = '#ffffff'}
             >
               Log In
-            </button>
+            </a>
              {/* Sign Up Button - Solid Amber */}
-            <button 
-              onClick={() => onStartSignup()}
+            <a 
+              href="/signup"
+              onClick={(e) => { e.preventDefault(); onStartSignup(); }}
               style={{
                 backgroundColor: '#ffb627',
                 border: 'none',
@@ -705,7 +730,9 @@ export default function Navbar({
                 padding: '9.5px 20px',
                 cursor: 'pointer',
                 boxShadow: '0 2px 4px rgba(255,182,39,0.15)',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
+                textDecoration: 'none',
+                display: 'inline-block'
               }}
               className="desktop-only"
               onMouseOver={(e) => {
@@ -718,7 +745,7 @@ export default function Navbar({
               }}
             >
               Sign Up
-            </button>
+            </a>
 
             {/* Toggleable Search Button / Input - Screenshot 555 style */}
             {!showSearchInput ? (
@@ -836,16 +863,18 @@ export default function Navbar({
 
             {/* Mobile Nav Links */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '4px' }}>
-              <span onClick={() => { setActivePage('catalog'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer' }}>All Courses</span>
-              <span onClick={() => { setSearchQuery('FTCE'); setActivePage('ftce'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer' }}>FTCE Exams</span>
-              <span onClick={() => { if (setHomeActiveTab) setHomeActiveTab('Test'); setActivePage('ftce'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer' }}>FTCE Practice Tests</span>
-              <span onClick={scrollToTestimonials} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer' }}>Testimonials</span>
+              <a href="/catalog" onClick={(e) => { e.preventDefault(); setActivePage('catalog'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer', textDecoration: 'none' }}>All Courses</a>
+              <a href="/academy/plans.html" onClick={(e) => { e.preventDefault(); setActivePage('plans'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer', textDecoration: 'none' }}>Plans</a>
+              <a href="/ftce" onClick={(e) => { e.preventDefault(); setSearchQuery('FTCE'); setActivePage('ftce'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer', textDecoration: 'none' }}>FTCE Exams</a>
+              <a href="/ftce" onClick={(e) => { e.preventDefault(); if (setHomeActiveTab) setHomeActiveTab('Test'); setActivePage('ftce'); setMobileMenuOpen(false); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer', textDecoration: 'none' }}>FTCE Practice Tests</a>
+              <a href="/ftce#testimonials" onClick={(e) => { e.preventDefault(); scrollToTestimonials(); }} style={{ fontSize: '0.95rem', fontWeight: '700', color: '#222222', cursor: 'pointer', textDecoration: 'none' }}>Testimonials</a>
             </div>
 
             {/* Mobile Action Buttons */}
             <div style={{ display: 'flex', gap: '12px', marginTop: '8px', borderTop: '1px solid #f2f6f9', paddingTop: '16px' }}>
-              <button 
-                onClick={() => { setActivePage('login'); setMobileMenuOpen(false); }}
+              <a 
+                href="/login"
+                onClick={(e) => { e.preventDefault(); setActivePage('login'); setMobileMenuOpen(false); }}
                 style={{
                   flex: 1,
                   backgroundColor: '#ffffff',
@@ -855,13 +884,16 @@ export default function Navbar({
                   fontWeight: '700',
                   padding: '10px',
                   cursor: 'pointer',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  display: 'block'
                 }}
               >
                 Log In
-              </button>
-              <button 
-                onClick={() => { onStartSignup(); setMobileMenuOpen(false); }}
+              </a>
+              <a 
+                href="/signup"
+                onClick={(e) => { e.preventDefault(); onStartSignup(); setMobileMenuOpen(false); }}
                 style={{
                   flex: 1,
                   backgroundColor: '#ffb627',
@@ -871,11 +903,13 @@ export default function Navbar({
                   fontWeight: '800',
                   padding: '10px',
                   cursor: 'pointer',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  display: 'block'
                 }}
               >
                 Sign Up
-              </button>
+              </a>
             </div>
           </div>
         )}

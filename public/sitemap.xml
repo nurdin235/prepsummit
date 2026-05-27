@@ -1,100 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
   <url>
-    <loc>https://prepsummit.com/</loc>
+    <loc>https://prepsumit.com/</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Pricing Page -->
   <url>
-    <loc>https://prepsummit.com/ftce</loc>
+    <loc>https://prepsumit.com/academy/plans.html</loc>
     <lastmod>2026-05-27</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Primary FTCE Pages (Prioritized First for Google Search Sitelinks) -->
   <url>
-    <loc>https://prepsummit.com/teas</loc>
+    <loc>https://prepsumit.com/ftce</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.98</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/catalog</loc>
+    <loc>https://prepsumit.com/courses/ftce-professional-education-test</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- TEAS Nursing Exam Pages -->
+  <url>
+    <loc>https://prepsumit.com/teas</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://prepsumit.com/courses/teas-prep</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Course Catalog Page -->
+  <url>
+    <loc>https://prepsumit.com/catalog</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
+
+  <!-- Accounts & Signups -->
   <url>
-    <loc>https://prepsummit.com/login</loc>
+    <loc>https://prepsumit.com/signup</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/signup</loc>
+    <loc>https://prepsumit.com/login</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.50</priority>
   </url>
-  <!-- Main Courses -->
+
+  <!-- Other Exam Courses -->
   <url>
-    <loc>https://prepsummit.com/courses/ftce-professional-education-test</loc>
+    <loc>https://prepsumit.com/courses/ap-calculus</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/teas-prep</loc>
+    <loc>https://prepsumit.com/courses/cell-biology</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/ap-calculus</loc>
+    <loc>https://prepsumit.com/courses/intro-psychology</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/cell-biology</loc>
+    <loc>https://prepsumit.com/courses/macroeconomics</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/intro-psychology</loc>
+    <loc>https://prepsumit.com/courses/us-history</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/macroeconomics</loc>
+    <loc>https://prepsumit.com/courses/english-composition</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/us-history</loc>
+    <loc>https://prepsumit.com/courses/nclex-rn-prep</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://prepsummit.com/courses/english-composition</loc>
+    <loc>https://prepsumit.com/courses/real-estate-salesperson</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://prepsummit.com/courses/nclex-rn-prep</loc>
-    <lastmod>2026-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://prepsummit.com/courses/real-estate-salesperson</loc>
-    <lastmod>2026-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
 </urlset>
