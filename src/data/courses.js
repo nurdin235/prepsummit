@@ -712,6 +712,67 @@ export const coursesData = [
     flashcards: [
       { id: "ws-fc1", term: "ACE Recommendation", definition: "A review process by the American Council on Education that validates non-traditional education for college transfer credit." }
     ]
+  },
+  {
+    id: "teas-prep",
+    title: "TEAS Test Prep | Test of Essential Academic Skills Exam",
+    subject: "Nursing Exams",
+    level: "Nursing Certification",
+    duration: "4 Weeks",
+    lessonsCount: 42,
+    rating: 4.7,
+    color: "#007791",
+    lightBg: "#f2f9fa",
+    practiceQuestions: 380,
+    practiceTests: 5,
+    videos: 36,
+    hoursOfVideo: 4,
+    image: "https://images.unsplash.com/photo-1582750433449-64c656fd170a?w=500&auto=format&fit=crop&q=60",
+    description: "PrepSummit.com's TEAS study guide is designed to fully prepare you for the Test of Essential Academic Skills. Master the Math, Science, English, and Reading sections with our micro-video lessons, flashcards, and standard-aligned practice quizzes.",
+    lessons: [
+      {
+        id: "teas-what-is-exam",
+        title: "What is on the TEAS Exam?",
+        duration: "7 mins",
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+        summary: "An overview of the TEAS test, including its format, sections, timing, scoring, and registration details. Learn how to strategize your study schedule.",
+        transcript: [
+          { time: "00:00", text: "Welcome to the TEAS Exam Prep study guide. Today we will explain what to expect on the test." },
+          { time: "02:00", text: "The TEAS consists of 170 multiple-choice questions covering Reading, Math, Science, and English." }
+        ],
+        quiz: [
+          {
+            id: "teas-q1",
+            question: "How many scored questions are on the TEAS exam?",
+            options: ["150 questions", "170 questions", "110 questions", "200 questions"],
+            answer: 0,
+            explanation: "Although there are 170 total questions on the TEAS, only 150 questions are scored. The remaining 20 are unscored pretest questions."
+          }
+        ]
+      },
+      {
+        id: "teas-math-fractions",
+        title: "TEAS Math: Fractions, Decimals & Percentages",
+        duration: "9 mins",
+        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+        summary: "Learn how to convert between fractions, decimals, and percentages, and solve standard word problems found on the TEAS Math section.",
+        transcript: [
+          { time: "00:00", text: "In this lesson, we cover essential TEAS math conversions." }
+        ],
+        quiz: [
+          {
+            id: "teas-q2",
+            question: "Convert 3/8 to a percentage.",
+            options: ["37.5%", "3.75%", "0.375%", "38%"],
+            answer: 0,
+            explanation: "To convert a fraction to a percentage, divide 3 by 8 to get 0.375, then multiply by 100 to get 37.5%."
+          }
+        ]
+      }
+    ],
+    flashcards: [
+      { id: "teas-fc1", term: "TEAS", definition: "Test of Essential Academic Skills, a standardized test used for nursing school admissions." }
+    ]
   }
 ];
 

@@ -124,7 +124,7 @@ export default function Login({ setActivePage, onStartSignup, onSelectCategoryLa
                     style={{
                       width: '18px',
                       height: '18px',
-                      accentColor: '#d93838', // study.com uses red checkboxes
+                      accentColor: '#d93838', // PrepSummit.com uses red checkboxes
                       cursor: 'pointer'
                     }}
                   />
@@ -188,7 +188,7 @@ export default function Login({ setActivePage, onStartSignup, onSelectCategoryLa
           {/* Right Column: Value Proposition & Signup Redirection */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', padding: '16px 0' }}>
             <h2 style={{ fontSize: '1.45rem', fontWeight: '700', color: '#1f4e5a', margin: '0' }}>
-              Need a Study.com Account?
+              Need a PrepSummit.com Account?
             </h2>
 
             {/* Checklist */}
@@ -389,7 +389,7 @@ export default function Login({ setActivePage, onStartSignup, onSelectCategoryLa
           }}>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxWidth: '800px' }}>
-              <span>© Copyright 2026 Study.com. All other trademarks and copyrights are the property of their respective owners. All rights reserved.</span>
+              <span>© Copyright 2026 PrepSummit.com. All other trademarks and copyrights are the property of their respective owners. All rights reserved.</span>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <span onClick={() => onOpenInfo('terms')} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Terms of Use</span>
                 <span>|</span>

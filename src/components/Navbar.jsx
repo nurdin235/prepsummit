@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
 
 export default function Navbar({ 
@@ -23,9 +23,21 @@ export default function Navbar({
     courses: 'By Subject',
     subjects: 'Business',
     teachers: 'Lesson Plans',
-    certifications: 'Finance Exams',
+    certifications: 'Teacher Certification Exams',
     degrees: 'Transfer Credits'
   });
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.nav-item-container')) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const dropdownStructure = {
     courses: [
@@ -274,25 +286,29 @@ export default function Navbar({
         name: 'Nursing Exams',
         hasArrow: true,
         items: [
-          { text: 'NCLEX-RN Prep', id: 'nclex-rn-prep' },
-          { text: 'NCLEX-PN Prep', query: 'NCLEX' },
-          { text: 'TEAS Exam Prep', query: 'TEAS' }
+          { text: 'NCLEX Test Prep', query: 'NCLEX' },
+          { text: 'TEAS Test Prep', query: 'TEAS' },
+          { text: 'HESI Test Prep', query: 'HESI' },
+          { text: 'All Nursing Test Prep', query: 'Nursing' }
         ]
       },
       {
         name: 'Real Estate Exams',
         hasArrow: true,
         items: [
-          { text: 'Salesperson Exam Prep', id: 'real-estate-salesperson' },
-          { text: 'Broker Exam Prep', query: 'Real Estate' }
+          { text: 'Real Estate Salesperson', id: 'real-estate-salesperson' },
+          { text: 'Real Estate Broker', query: 'Real Estate' },
+          { text: 'All Real Estate Prep', query: 'Real Estate' }
         ]
       },
       {
         name: 'Military Exams',
         hasArrow: true,
         items: [
-          { text: 'ASVAB General Prep', id: 'asvab-prep' },
-          { text: 'AFOQT Prep', query: 'ASVAB' }
+          { text: 'ASVAB Test Prep', id: 'asvab-prep' },
+          { text: 'AFOQT Test Prep', query: 'ASVAB' },
+          { text: 'ASTB Test Prep', query: 'ASVAB' },
+          { text: 'All Military Test Prep', query: 'ASVAB' }
         ]
       },
       {
@@ -313,35 +329,37 @@ export default function Navbar({
         name: 'Human Resources Exams',
         hasArrow: true,
         items: [
-          { text: 'aPHR Prep', query: 'HR' },
-          { text: 'PHR Prep', query: 'HR' },
-          { text: 'SPHR Prep', query: 'HR' }
+          { text: 'aPHR Test Prep', query: 'HR' },
+          { text: 'PHR Test Prep', query: 'HR' },
+          { text: 'SPHR Test Prep', query: 'HR' },
+          { text: 'All HR Test Prep', query: 'HR' }
         ]
       },
       {
         name: 'Counseling & Social Work Exams',
         hasArrow: true,
         items: [
-          { text: 'LCSW Prep', query: 'counseling' },
-          { text: 'MFT Prep', query: 'counseling' }
+          { text: 'LCSW Test Prep', query: 'counseling' },
+          { text: 'MFT Test Prep', query: 'counseling' },
+          { text: 'All Counseling Test Prep', query: 'counseling' }
         ]
       },
       {
         name: 'Allied Health & Medicine Exams',
         hasArrow: true,
         items: [
-          { text: 'CMAA Prep', query: 'medicine' },
-          { text: 'Phlebotomy Tech Prep', query: 'medicine' }
+          { text: 'CMAA Test Prep', query: 'medicine' },
+          { text: 'Phlebotomy Test Prep', query: 'medicine' },
+          { text: 'All Allied Health Prep', query: 'medicine' }
         ]
       },
       {
         name: 'TOEFL Exam',
         hasArrow: true,
         items: [
-          { text: 'TOEFL Reading', id: 'toefl-prep' },
-          { text: 'TOEFL Listening', id: 'toefl-prep' },
-          { text: 'TOEFL Speaking', id: 'toefl-prep' },
-          { text: 'TOEFL Writing', id: 'toefl-prep' }
+          { text: 'TOEFL Test Prep', id: 'toefl-prep' },
+          { text: 'IELTS Test Prep', query: 'TOEFL' },
+          { text: 'All English Test Prep', query: 'TOEFL' }
         ]
       },
       {
@@ -397,7 +415,7 @@ export default function Navbar({
       if (setHomeActiveTab) setHomeActiveTab('Overview');
       setActivePage('ftce');
     } else {
-      setActivePage('catalog');
+      setActivePage('search');
     }
   };
 
@@ -530,7 +548,7 @@ export default function Navbar({
                 Plans
               </button>
 
-              {/* Dynamic Dropdowns based on Study.com categories */}
+              {/* Dynamic Dropdowns based on PrepSummit.com categories */}
               {['courses', 'subjects', 'teachers', 'certifications', 'degrees'].map((key) => {
                 let label = key.charAt(0).toUpperCase() + key.slice(1);
                 if (key === 'degrees') label = 'College Degrees';
@@ -538,13 +556,14 @@ export default function Navbar({
                   <div 
                     key={key}
                     style={{ position: 'relative' }}
+                    className="nav-item-container"
                     onMouseEnter={() => {
                       setActiveDropdown(key);
                       const defaultCats = {
                         courses: 'By Subject',
                         subjects: 'Business',
                         teachers: 'Lesson Plans',
-                        certifications: 'Finance Exams',
+                        certifications: 'Teacher Certification Exams',
                         degrees: 'Transfer Credits'
                       };
                       setActiveSubCategory(prev => ({ ...prev, [key]: defaultCats[key] }));
@@ -552,19 +571,17 @@ export default function Navbar({
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <button 
-                      onClick={() => {
-                        if (key === 'courses') {
-                          setActivePage('catalog');
-                          setSearchQuery('');
-                        } else if (key === 'subjects') {
-                          onSelectCategoryLanding('subject-math');
-                        } else if (key === 'teachers') {
-                          onSelectCategoryLanding('teacher-resources');
-                        } else if (key === 'certifications') {
-                          setActivePage('ftce');
-                        } else if (key === 'degrees') {
-                          onSelectCategoryLanding('college-credit');
-                        }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveDropdown(activeDropdown === key ? null : key);
+                        const defaultCats = {
+                          courses: 'By Subject',
+                          subjects: 'Business',
+                          teachers: 'Lesson Plans',
+                          certifications: 'Teacher Certification Exams',
+                          degrees: 'Transfer Credits'
+                        };
+                        setActiveSubCategory(prev => ({ ...prev, [key]: defaultCats[key] }));
                       }}
                       style={{
                         background: 'none', border: 'none', fontFamily: 'var(--font-heading)',
@@ -581,18 +598,35 @@ export default function Navbar({
                       <div className={`nav-dropdown-pane ${(key === 'certifications' || key === 'degrees') ? 'align-right' : ''}`}>
                         {/* Left column: Categories list */}
                         <div className="nav-dropdown-left">
-                          {dropdownStructure[key].map((categoryItem) => (
-                            <div
-                              key={categoryItem.name}
-                              className={`nav-dropdown-cat-item ${activeSubCategory[key] === categoryItem.name ? 'active' : ''}`}
-                              onMouseEnter={() => {
-                                setActiveSubCategory(prev => ({ ...prev, [key]: categoryItem.name }));
-                              }}
-                            >
-                              <span>{categoryItem.name}</span>
-                              {categoryItem.hasArrow && <ChevronRight size={14} style={{ opacity: 0.6 }} />}
-                            </div>
-                          ))}
+                          {dropdownStructure[key].map((categoryItem) => {
+                            const isAllTestPrep = categoryItem.name === 'All Test Prep';
+                            return (
+                              <div
+                                key={categoryItem.name}
+                                className={`nav-dropdown-cat-item ${isAllTestPrep ? 'blue-link' : ''} ${activeSubCategory[key] === categoryItem.name ? 'active' : ''}`}
+                                style={isAllTestPrep ? { justifyContent: 'flex-start', gap: '8px' } : {}}
+                                onMouseEnter={() => {
+                                  setActiveSubCategory(prev => ({ ...prev, [key]: categoryItem.name }));
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (isAllTestPrep) {
+                                    setSearchQuery('Exam');
+                                    setActivePage('search');
+                                    setActiveDropdown(null);
+                                  } else {
+                                    setActiveSubCategory(prev => ({ ...prev, [key]: categoryItem.name }));
+                                  }
+                                }}
+                              >
+                                {isAllTestPrep && <ChevronRight size={14} className="blue-chevron" />}
+                                <span>{categoryItem.name}</span>
+                                {categoryItem.hasArrow && (
+                                  <ChevronRight size={14} style={{ opacity: 0.6 }} />
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
 
                         {/* Right column: Dynamic Sub-items list */}
@@ -612,8 +646,10 @@ export default function Navbar({
                                     setSearchQuery(subItem.query);
                                     if (subItem.query === 'FTCE') {
                                       setActivePage('ftce');
+                                    } else if (subItem.query === 'TEAS') {
+                                      setActivePage('teas');
                                     } else {
-                                      setActivePage('catalog');
+                                      setActivePage('search');
                                     }
                                   }
                                   setActiveDropdown(null);

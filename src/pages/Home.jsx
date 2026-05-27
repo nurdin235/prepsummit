@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronRight, ChevronDown, Search, Briefcase, Lightbulb, GraduationCap, ListPlus, Clock } from 'lucide-react';
 
-// Custom Dropdown Component to mirror study.com's custom dropdowns
+// Custom Dropdown Component to mirror PrepSummit.com's custom dropdowns
 function CardDropdown({ placeholder, sections, onSelect, openUpwards = false, isOpen, onToggle }) {
   const containerRef = useRef(null);
 
@@ -139,7 +139,7 @@ export default function Home({
     if (query.includes('ftce') || query === 'ped') {
       setActivePage('ftce');
     } else {
-      setActivePage('catalog');
+      setActivePage('search');
     }
   };
 
@@ -161,23 +161,23 @@ export default function Home({
       onSelectCategoryLanding('subject-humanities');
     } else if (opt === 'nursing exams' || opt.includes('health') || opt === 'nclex') {
       setSearchQuery('NCLEX');
-      setActivePage('catalog');
+      setActivePage('search');
     } else if (opt === 'real estate exams') {
       setSearchQuery('Real Estate');
-      setActivePage('catalog');
+      setActivePage('search');
     } else if (opt === 'military exams' || opt.includes('asvab')) {
       setSearchQuery('ASVAB');
-      setActivePage('catalog');
+      setActivePage('search');
     } else if (opt === 'counseling & social work exams' || opt.includes('hr & finance')) {
       setSearchQuery('Praxis');
-      setActivePage('catalog');
+      setActivePage('search');
     } else if (opt === 'overview' || opt === 'transfer' || opt === 'pricing' || opt === 'what is ace/nccrs?' || opt === 'earn credit') {
       onSelectCategoryLanding('college-credit');
     } else if (opt.includes('elementary') || opt.includes('middle') || opt.includes('high') || opt.includes('college') || opt.includes('grad') || opt.includes('adult') || opt.includes('certificates') || opt.includes('professional development') || opt.includes('lesson plans')) {
       onSelectCategoryLanding('teacher-resources');
     } else {
       setSearchQuery(optionText);
-      setActivePage('catalog');
+      setActivePage('search');
     }
   };
 
@@ -1410,7 +1410,7 @@ export default function Home({
                 “
               </div>
               <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                Study.com allowed me to complete my courses in a fraction of the time it took my peers and for a fraction of the cost. I highly recommend their comprehensive programs.
+                PrepSummit.com allowed me to complete my courses in a fraction of the time it took my peers and for a fraction of the cost. I highly recommend their comprehensive programs.
               </p>
               <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>Aimee K.</h4>
               {/* Profile Image Hanging */}
@@ -1446,7 +1446,7 @@ export default function Home({
                 “
               </div>
               <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                I always received poor grades in History. Study.com really helped me learn the material and I received my highest CLEP score ever!
+                I always received poor grades in History. PrepSummit.com really helped me learn the material and I received my highest CLEP score ever!
               </p>
               <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>Sharla W.</h4>
               {/* Profile Image Hanging */}
@@ -1482,7 +1482,7 @@ export default function Home({
                 “
               </div>
               <p style={{ color: '#4a5568', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '32px' }}>
-                Study.com is literally the best guide to help you through rigorous class material and will help foster growth within your educational journey.
+                PrepSummit.com is literally the best guide to help you through rigorous class material and will help foster growth within your educational journey.
               </p>
               <h4 style={{ color: '#000000', fontSize: '1.2rem', fontWeight: '700', margin: '0' }}>John W.</h4>
               {/* Profile Image Hanging */}

@@ -5,6 +5,43 @@ export default function CourseDetail({ course, onBack, onSelectLesson, onStartSi
   const [activeTab, setActiveTab] = useState('Overview'); // 'Overview', 'Syllabus', 'Test'
   const [expandedChapters, setExpandedChapters] = useState({ 0: true, 1: true });
   
+  const getDynamicReview = () => {
+    const title = (course.title || '').toLowerCase();
+    const subject = (course.subject || '').toLowerCase();
+    
+    if (title.includes('ftce')) {
+      return `"I was terrified of the FTCE exam, but after watching these video lessons, I passed on my first attempt. Highly recommended study guide!"`;
+    }
+    if (title.includes('praxis')) {
+      return `"I was struggling with the Praxis exam prep for weeks. This course broke down every single competency clearly, and I passed on my first try!"`;
+    }
+    if (title.includes('nclex') || title.includes('nursing')) {
+      return `"As a nursing student, the NCLEX preparation can feel overwhelming. The video lessons and practice quizzes here made it manageable and fun. I passed easily!"`;
+    }
+    if (title.includes('calculus') || title.includes('math') || subject.includes('math')) {
+      return `"Calculus was my weakest subject, but this study guide made the derivative and limit concepts click. I got an A on my final exam!"`;
+    }
+    if (title.includes('biology') || title.includes('science') || subject.includes('science')) {
+      return `"The biology diagrams and explanations in this course were so clear. It really helped me study cell structures and pass my exams."`;
+    }
+    if (title.includes('psychology')) {
+      return `"An amazing resource for Intro to Psychology! The flashcards and practice quizzes helped me master the conditioning theories in no time."`;
+    }
+    if (title.includes('economics') || title.includes('finance') || title.includes('gdp')) {
+      return `"Macroeconomics concepts like GDP and inflation were made simple. The lessons are short, clear, and perfectly aligned with the exams!"`;
+    }
+    if (title.includes('history')) {
+      return `"I always received poor grades in US History. This guide really helped me learn the material and I received a fantastic score!"`;
+    }
+    if (title.includes('composition') || title.includes('english')) {
+      return `"Writing essays used to stress me out, but this English composition guide helped me structure my arguments and avoid common grammar mistakes."`;
+    }
+    if (title.includes('real estate')) {
+      return `"This was the perfect real estate prep course. It explained property ownership and eminent domain clearly, helping me pass my licensing exam."`;
+    }
+    return `"This prep course was an amazing resource. The lessons are short and direct, and the quizzes give you immediate feedback. Highly recommended!"`;
+  };
+  
   // Quiz widget state (Screenshot 484 style)
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
@@ -281,7 +318,7 @@ export default function CourseDetail({ course, onBack, onSelectLesson, onStartSi
                   Excellent 4.8 out of 5 stars based on 12,450 student reviews
                 </strong>
                 <p style={{ fontSize: '0.85rem', color: '#718096', lineHeight: '1.4' }}>
-                  "I was terrified of the FTCE professional education exam, but after watching these video lessons, I passed on my first attempt. Highly recommended study guide!"
+                  {getDynamicReview()}
                 </p>
               </div>
             </>

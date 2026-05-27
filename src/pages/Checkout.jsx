@@ -399,7 +399,7 @@ export default function Checkout({ signupData, onCheckoutComplete, selectedCours
                 lineHeight: '1.5',
                 margin: '8px 0 0 0'
               }}>
-                By creating an account, you agree to Study.com's <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Terms of Use</a> and <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Privacy Policy</a>.
+                By creating an account, you agree to PrepSummit.com's <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Terms of Use</a> and <a href="#" style={{ color: '#00829a', textDecoration: 'underline' }}>Privacy Policy</a>.
               </p>
 
               {/* Submit Button */}

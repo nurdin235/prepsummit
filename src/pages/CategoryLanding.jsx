@@ -117,7 +117,7 @@ export default function CategoryLanding({ category, courses, onSelectCourse, onS
         const formattedSubj = subjName.charAt(0).toUpperCase() + subjName.slice(1);
         return {
           title: `Master ${formattedSubj} Courses & Concepts`,
-          subtitle: `Boost your grades, study for AP exams, or prep for college classes with study.com-aligned visual guides and adaptive practice questions.`,
+          subtitle: `Boost your grades, study for AP exams, or prep for college classes with PrepSummit.com-aligned visual guides and adaptive practice questions.`,
           heroBg: "linear-gradient(135deg, #13809c 0%, #1f4e5a 100%)",
           accentColor: "#ffb627",
           stats: [

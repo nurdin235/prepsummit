@@ -13,6 +13,8 @@ import Login from './pages/Login';
 import CategoryLanding from './pages/CategoryLanding';
 import AITutor from './components/AITutor';
 import EmailPopup from './components/EmailPopup';
+import SearchResults from './pages/SearchResults';
+import TeasLanding from './pages/TeasLanding';
 
 import { coursesData, userStatsData } from './data/courses';
 import { Award, Sparkles, X, Info } from 'lucide-react';
@@ -32,13 +34,26 @@ export default function App() {
     ) {
       return 'ftce';
     }
+    if (
+      path.includes('teas') || 
+      hash.includes('teas') || 
+      q === 'teas'
+    ) {
+      return 'teas';
+    }
+    if (q) {
+      return 'search';
+    }
     return 'home';
   }); 
 
   const [homeActiveTab, setHomeActiveTab] = useState('Overview'); 
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('q') || '';
+  });
   const [darkMode, setDarkMode] = useState(false);
   const [userStats, setUserStats] = useState(userStatsData);
   
@@ -224,6 +239,61 @@ export default function App() {
     setActivePage('signup');
   };
 
+  // Dynamic SEO Meta Update Hook
+  useEffect(() => {
+    let title = "PrepSummit | Online Courses for College Credit, Exam Prep & Test Preparation";
+    let metaDesc = "PrepSummit is a leading online learning platform offering visual micro-lessons, practice quizzes, and custom study guides for exam prep, college credit, and teacher certification. Access 88,000+ courses and study on your schedule, risk-free.";
+    
+    switch (activePage) {
+      case 'home':
+        title = "PrepSummit | Online Courses for College Credit, Exam Prep & Test Preparation";
+        metaDesc = "Boost your grades, study for exams, or earn transferable college credit with PrepSummit's standard-aligned visual guides, micro-lessons, and practice tests.";
+        break;
+      case 'ftce':
+        title = "FTCE Professional Education Test (PEd) Study Guide & Test Prep | PrepSummit";
+        metaDesc = "Prepare for the Florida Teacher Certification Examinations (FTCE) with PrepSummit's comprehensive preparation program. Access practice tests, study resources, and video tutorials.";
+        break;
+      case 'teas':
+        title = "TEAS Test Prep & Study Guide | PrepSummit Nursing";
+        metaDesc = "Prepare for your Test of Essential Academic Skills (TEAS) all in one place. Master TEAS Reading, Math, Science, and English with micro-lessons, flashcards, and practice quizzes.";
+        break;
+      case 'catalog':
+        title = "Course Catalog & Study Guides | PrepSummit";
+        metaDesc = "Browse hundreds of PrepSummit study guides, video lessons, and exam prep courses across Math, Science, Humanities, Business, and Teacher Certification.";
+        break;
+      case 'search':
+        title = searchQuery ? `Search Results for "${searchQuery}" | PrepSummit` : "Search Courses & Study Guides | PrepSummit";
+        metaDesc = `Find PrepSummit study resources, practice tests, and video courses for ${searchQuery || 'your exams'}.`;
+        break;
+      case 'login':
+        title = "Log In to Your Account | PrepSummit";
+        metaDesc = "Log in to your PrepSummit account to resume your video lessons, check your quiz scores, and track your study progress.";
+        break;
+      case 'signup':
+        title = "Create Your Account, Risk-Free | PrepSummit";
+        metaDesc = "Sign up for PrepSummit today and join thousands of students boosting their exam scores and earning transferable college credits.";
+        break;
+      case 'checkout':
+        title = "Complete Your Enrollment | PrepSummit";
+        metaDesc = "Unlock full access to visual study guides, expert video lessons, and proctored certification exams on PrepSummit.";
+        break;
+      case 'dashboard':
+        title = "Student Dashboard | PrepSummit";
+        metaDesc = "Resume your courses, view your achievements, track weekly goals, and access your study materials from your custom PrepSummit dashboard.";
+        break;
+      default:
+        break;
+    }
+    
+    document.title = title;
+    
+    // Update the meta description tag dynamically
+    const descTag = document.querySelector('meta[name="description"]');
+    if (descTag) {
+      descTag.setAttribute('content', metaDesc);
+    }
+  }, [activePage, searchQuery]);
+
   return (
     <div className={`app-container ${darkMode ? 'dark-theme' : ''}`}>
       {/* Navigation Header */}
@@ -258,7 +328,7 @@ export default function App() {
             </span>
           </div>
         </header>
-      ) : (
+      ) : activePage === 'teas' ? null : (
         <Navbar 
           activePage={activePage}
           setActivePage={setActivePage}
@@ -278,7 +348,7 @@ export default function App() {
       )}
 
       {/* Main Core View Area */}
-      <main className={(activePage === 'home' || activePage === 'signup' || activePage === 'checkout') ? "main-content-full-width" : "main-content"} style={{ minHeight: 'calc(100vh - 400px)' }}>
+      <main className={(activePage === 'home' || activePage === 'signup' || activePage === 'checkout' || activePage === 'teas') ? "main-content-full-width" : "main-content"} style={{ minHeight: 'calc(100vh - 400px)' }}>
         {activePage === 'home' && (
           <Home 
             courses={coursesData}
@@ -290,6 +360,17 @@ export default function App() {
             onSelectLesson={handleSelectLesson}
             onStartSignup={() => setShowEmailPopup(true)}
             onSelectCategoryLanding={handleSelectCategoryLanding}
+          />
+        )}
+
+        {activePage === 'teas' && (
+          <TeasLanding 
+            onBackToHome={() => setActivePage('home')}
+            onStartSignup={() => setShowEmailPopup(true)}
+            setActivePage={setActivePage}
+            setSearchQuery={setSearchQuery}
+            onSelectCourse={handleSelectCourse}
+            courses={coursesData}
           />
         )}
 
@@ -312,6 +393,16 @@ export default function App() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             onSelectCourse={handleSelectCourse}
+          />
+        )}
+
+        {activePage === 'search' && (
+          <SearchResults 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onSelectCourse={handleSelectCourse}
+            onStartSignup={() => setShowEmailPopup(true)}
+            courses={coursesData}
           />
         )}
 
@@ -381,7 +472,7 @@ export default function App() {
       </main>
 
       {/* Floating AI Tutor Chatbot on Study & Catalog Pages */}
-      {(activePage === 'detail' || activePage === 'lesson' || activePage === 'ftce' || activePage === 'landing' || activePage === 'catalog') && (
+      {(activePage === 'detail' || activePage === 'lesson' || activePage === 'ftce' || activePage === 'landing' || activePage === 'catalog' || activePage === 'search') && (
         <AITutor course={selectedCourse} lesson={selectedLesson} />
       )}
 

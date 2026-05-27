@@ -286,7 +286,7 @@ export default function FtceCourse({
     e.preventDefault();
     if (!homeSearchInput.trim()) return;
     setSearchQuery(homeSearchInput);
-    setActivePage('catalog');
+    setActivePage('search');
   };
 
   // Handles clicking a recommended course
@@ -441,7 +441,7 @@ export default function FtceCourse({
               </button>
             </div>
 
-            {/* Illustrated vector desk scene SVG (Premium Study.com look representation) */}
+            {/* Illustrated vector desk scene SVG (Premium PrepSummit.com look representation) */}
             <div style={{ display: 'flex', justifyContent: 'center' }} className="desktop-only">
               <svg width="340" height="260" viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg">
                 {/* Circle Background */}
@@ -1100,7 +1100,7 @@ export default function FtceCourse({
           <div style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             <span onClick={() => { setActiveTab('Overview'); setSearchQuery(''); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>All Test Prep</span>
             <ChevronRight size={12} />
-            <span onClick={() => { setSearchQuery('FTCE'); setActivePage('catalog'); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>FTCE Test Preparation & Resources</span>
+            <span onClick={() => { setSearchQuery('FTCE'); setActivePage('search'); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>FTCE Test Preparation & Resources</span>
             <ChevronRight size={12} />
             <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>FTCE PEd</span>
           </div>
@@ -2069,7 +2069,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE Science'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE Science'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -2102,7 +2102,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE GK Reading'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE GK Reading'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -2135,7 +2135,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE GK English'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE GK English'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -2168,7 +2168,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE Psychologist'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE Psychologist'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -2201,7 +2201,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE Counseling'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE Counseling'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -2234,7 +2234,7 @@ export default function FtceCourse({
             cursor: 'pointer',
             transition: 'transform 0.2s'
           }}
-            onClick={() => { setSearchQuery('FTCE English'); setActivePage('catalog'); }}
+            onClick={() => { setSearchQuery('FTCE English'); setActivePage('search'); }}
             onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'}
             onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
