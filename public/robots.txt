@@ -1,5 +1,0 @@
-# Robots.txt for PrepSummit.com
-User-agent: *
-Allow: /
-
-Sitemap: https://prepsummit.com/sitemap.xml
