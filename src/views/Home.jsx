@@ -2487,17 +2487,25 @@ export default function Home({
               Blaze a trail. Learn something new.<br/>
               Opportunity's knocking. Will you answer?
             </p>
-            <button style={{ 
-              backgroundColor: '#ffb627', 
-              color: '#000000', 
-              padding: '14px 32px', 
-              borderRadius: '8px', 
-              fontSize: '1.1rem', 
-              fontWeight: '800',
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: "var(--font-body)"
-            }}>
+            <button 
+              onClick={() => onStartSignup()}
+              style={{ 
+                backgroundColor: '#ffb627', 
+                color: '#000000', 
+                padding: '14px 32px', 
+                borderRadius: '8px', 
+                fontSize: '1.1rem', 
+                fontWeight: '800',
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: "var(--font-body)",
+                transition: 'background-color 0.2s, transform 0.15s'
+              }}
+              onMouseOver={e => e.currentTarget.style.backgroundColor = '#fba919'}
+              onMouseOut={e => e.currentTarget.style.backgroundColor = '#ffb627'}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.97)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
               Get started
             </button>
           </div>
